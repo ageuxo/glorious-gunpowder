@@ -17,7 +17,7 @@ public abstract class AbstractFirearm extends Item {
         stack.set(GunDataComponents.GUN_ATTRIBUTES, gunAttribute);
     }
     public GunAttribute getGunAttributes(ItemStack stack) {
-        return stack.getOrDefault(GunDataComponents.GUN_ATTRIBUTES, new GunAttribute(0, 1, 1f));
+        return stack.getOrDefault(GunDataComponents.GUN_ATTRIBUTES, new GunAttribute(0f, 1f, 1f));
     }
     public void setNewComponents(ItemStack stack, List<GunComponents> components) {
         List<GunComponents> existingComponentData = new ArrayList<>(stack.getOrDefault(GunDataComponents.GUN_COMPONENTS, new ArrayList<>()));
