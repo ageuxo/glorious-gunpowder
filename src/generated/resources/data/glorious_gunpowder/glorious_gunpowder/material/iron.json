@@ -1,0 +1,17 @@
+{
+  "modifiers": [
+    {
+      "type": 0,
+      "id": "iron_reload",
+      "stat": "glorious_gunpowder:reload_time",
+      "value": 2.0
+    },
+    {
+      "type": 1,
+      "id": "iron_damage",
+      "stat": "glorious_gunpowder:damage",
+      "value": 1.5
+    }
+  ],
+  "name": "iron"
+}
