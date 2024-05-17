@@ -21,7 +21,7 @@ public record GunStat(String name, double defaultValue) {
     }
 
     public static Registry<GunStat> getRegistry() {
-        return GunRegistries.GUN_STATS.getRegistry().get();
+        return GunRegistries.GUN_STATS;
     }
 
     public Holder<GunStat> getHolder(){
