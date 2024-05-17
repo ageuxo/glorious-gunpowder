@@ -1,13 +1,13 @@
 {
   "modifiers": [
     {
-      "type": 1,
+      "type": "MULTIPLIER",
       "id": "barrel_accuracy",
       "stat": "glorious_gunpowder:accuracy",
       "value": 0.4
     },
     {
-      "type": 0,
+      "type": "ADDITION",
       "id": "barrel_reload",
       "stat": "glorious_gunpowder:reload_time",
       "value": -3.0

@@ -1,13 +1,13 @@
 {
   "modifiers": [
     {
-      "type": 1,
+      "type": "MULTIPLIER",
       "id": "wood_reload",
       "stat": "glorious_gunpowder:reload_time",
       "value": 0.8
     },
     {
-      "type": 1,
+      "type": "MULTIPLIER",
       "id": "wood_damage",
       "stat": "glorious_gunpowder:damage",
       "value": 0.8
