@@ -1,17 +1,35 @@
 {
-  "modifiers": [
+  "entries": [
     {
-      "type": "ADDITION",
-      "id": "iron_reload",
-      "stat": "glorious_gunpowder:reload_time",
-      "value": 2.0
+      "id": "glorious_gunpowder:standard_stock",
+      "modifiers": [
+        {
+          "type": "ADDITION",
+          "stat": "glorious_gunpowder:accuracy",
+          "value": 0.2
+        },
+        {
+          "type": "MULTIPLIER",
+          "stat": "glorious_gunpowder:reload_time",
+          "value": 1.3
+        }
+      ]
     },
     {
-      "type": "MULTIPLIER",
-      "id": "iron_damage",
-      "stat": "glorious_gunpowder:damage",
-      "value": 1.5
+      "id": "glorious_gunpowder:unrifled_barrel",
+      "modifiers": [
+        {
+          "type": "MULTIPLIER",
+          "stat": "glorious_gunpowder:damage",
+          "value": 1.4
+        },
+        {
+          "type": "MULTIPLIER",
+          "stat": "glorious_gunpowder:accuracy",
+          "value": 1.4
+        }
+      ]
     }
   ],
-  "name": "iron"
+  "key": "glorious_gunpowder:iron"
 }
