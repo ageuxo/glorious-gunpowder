@@ -1,17 +1,35 @@
 {
-  "modifiers": [
+  "entries": [
     {
-      "type": "MULTIPLIER",
-      "id": "wood_reload",
-      "stat": "glorious_gunpowder:reload_time",
-      "value": 0.8
+      "id": "glorious_gunpowder:standard_stock",
+      "modifiers": [
+        {
+          "type": "ADDITION",
+          "stat": "glorious_gunpowder:accuracy",
+          "value": 0.4
+        },
+        {
+          "type": "MULTIPLIER",
+          "stat": "glorious_gunpowder:reload_time",
+          "value": 0.3
+        }
+      ]
     },
     {
-      "type": "MULTIPLIER",
-      "id": "wood_damage",
-      "stat": "glorious_gunpowder:damage",
-      "value": 0.8
+      "id": "glorious_gunpowder:unrifled_barrel",
+      "modifiers": [
+        {
+          "type": "MULTIPLIER",
+          "stat": "glorious_gunpowder:damage",
+          "value": 0.4
+        },
+        {
+          "type": "MULTIPLIER",
+          "stat": "glorious_gunpowder:accuracy",
+          "value": 0.4
+        }
+      ]
     }
   ],
-  "name": "wood"
+  "key": "glorious_gunpowder:wood"
 }

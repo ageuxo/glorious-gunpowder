@@ -33,20 +33,20 @@ public class PartShapeProvider extends DatapackBuiltinEntriesProvider {
     public static final ResourceKey<PartShape> MATCHLOCK = createKey("matchlock");
 
     public static void bootstrap(BootstrapContext<PartShape> context){
-        context.register(STANDARD_STOCK, new PartShape("standard_stock",
+        context.register(STANDARD_STOCK, new PartShape(STANDARD_STOCK,
                 List.of(
-                        new GunStatModifier(GunStats.ACCURACY.get(), GunStatModifier.Type.MULTIPLIER, "stock_accuracy", 1.2),
-                        new GunStatModifier(GunStats.RELOAD_TIME.get(), GunStatModifier.Type.ADDITION, "stock_reload", -1)
+                        new GunStatModifier(GunStats.ACCURACY.get(), GunStatModifier.Type.MULTIPLIER, 1.2),
+                        new GunStatModifier(GunStats.RELOAD_TIME.get(), GunStatModifier.Type.ADDITION, -1)
         )));
-        context.register(UNRIFLED_BARREL, new PartShape("unrifled_barrel",
+        context.register(UNRIFLED_BARREL, new PartShape(UNRIFLED_BARREL,
                 List.of(
-                        new GunStatModifier(GunStats.ACCURACY.get(), GunStatModifier.Type.MULTIPLIER, "barrel_accuracy", 0.4),
-                        new GunStatModifier(GunStats.RELOAD_TIME.get(), GunStatModifier.Type.ADDITION, "barrel_reload", -3)
+                        new GunStatModifier(GunStats.ACCURACY.get(), GunStatModifier.Type.MULTIPLIER, 0.4),
+                        new GunStatModifier(GunStats.RELOAD_TIME.get(), GunStatModifier.Type.ADDITION, -3)
                 )));
-        context.register(MATCHLOCK, new PartShape("matchlock",
+        context.register(MATCHLOCK, new PartShape(MATCHLOCK,
                 List.of(
-                        new GunStatModifier(GunStats.DAMAGE.get(), GunStatModifier.Type.MULTIPLIER, "matchlock_damage", 0.8),
-                        new GunStatModifier(GunStats.RELOAD_TIME.get(), GunStatModifier.Type.ADDITION, "matchlock_reload", 2)
+                        new GunStatModifier(GunStats.DAMAGE.get(), GunStatModifier.Type.MULTIPLIER, 0.8),
+                        new GunStatModifier(GunStats.RELOAD_TIME.get(), GunStatModifier.Type.ADDITION, 2)
                 )));
     }
 

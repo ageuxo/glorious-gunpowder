@@ -10,14 +10,13 @@ import net.minecraft.resources.ResourceKey;
 public record GunStat(String name, double defaultValue) {
 
     public static final ResourceKey<Registry<GunStat>> KEY = ResourceKey.createRegistryKey(GloriousGunpowderMod.rl("gunstat"));
-    public static final RegistryFixedCodec<GunStat> CODEC = RegistryFixedCodec.create(GunStat.KEY);
 
-    public GunStatModifier additionMod(String id, double value){
-        return new GunStatModifier(this, GunStatModifier.Type.ADDITION, id, value);
+    public GunStatModifier additionMod(double value){
+        return new GunStatModifier(this, GunStatModifier.Type.ADDITION, value);
     }
 
-    public GunStatModifier multiplierMod(String id, double value){
-        return new GunStatModifier(this, GunStatModifier.Type.MULTIPLIER, id, value);
+    public GunStatModifier multiplierMod(double value){
+        return new GunStatModifier(this, GunStatModifier.Type.MULTIPLIER, value);
     }
 
     public static Registry<GunStat> getRegistry() {

@@ -1,17 +1,15 @@
 {
+  "key": "glorious_gunpowder:matchlock",
   "modifiers": [
     {
       "type": "MULTIPLIER",
-      "id": "matchlock_damage",
       "stat": "glorious_gunpowder:damage",
       "value": 0.8
     },
     {
       "type": "ADDITION",
-      "id": "matchlock_reload",
       "stat": "glorious_gunpowder:reload_time",
       "value": 2.0
     }
-  ],
-  "name": "matchlock"
+  ]
 }
