@@ -27,7 +27,9 @@ public class GloriousGunpowderMod {
         eventBus.register(ModBusEvents.class);
         if(FMLEnvironment.dist == Dist.CLIENT) {
             NeoForge.EVENT_BUS.register(new GunRenderHandler());
+            eventBus.register(ClientModBusEvents.class);
         }
+
     }
 
     public static ResourceLocation rl(String path){
