@@ -10,6 +10,11 @@
       "type": "ADDITION",
       "stat": "glorious_gunpowder:reload_time",
       "value": -1.0
+    },
+    {
+      "type": "ADDITION",
+      "stat": "glorious_gunpowder:recoil",
+      "value": -1.0
     }
   ]
 }

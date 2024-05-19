@@ -36,7 +36,8 @@ public class PartShapeProvider extends DatapackBuiltinEntriesProvider {
         context.register(STANDARD_STOCK, new PartShape(STANDARD_STOCK,
                 List.of(
                         new GunStatModifier(GunStats.ACCURACY.get(), GunStatModifier.Type.MULTIPLIER, 1.2),
-                        new GunStatModifier(GunStats.RELOAD_TIME.get(), GunStatModifier.Type.ADDITION, -1)
+                        new GunStatModifier(GunStats.RELOAD_TIME.get(), GunStatModifier.Type.ADDITION, -1),
+                        new GunStatModifier(GunStats.RECOIL.get(), GunStatModifier.Type.ADDITION, -1)
         )));
         context.register(UNRIFLED_BARREL, new PartShape(UNRIFLED_BARREL,
                 List.of(

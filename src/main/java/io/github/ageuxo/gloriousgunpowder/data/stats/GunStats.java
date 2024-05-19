@@ -12,6 +12,7 @@ public class GunStats {
     public static final DeferredHolder<GunStat, GunStat> RELOAD_TIME = GUN_STATS.register("reload_time", ()->new GunStat("reload_time", 4));
     public static final DeferredHolder<GunStat, GunStat> ACCURACY = GUN_STATS.register("accuracy", ()->new GunStat("accuracy", 1));
     public static final DeferredHolder<GunStat, GunStat> VELOCITY = GUN_STATS.register("velocity", ()->new GunStat("velocity", 1));
+    public static final DeferredHolder<GunStat, GunStat> RECOIL = GUN_STATS.register("recoil", ()->new GunStat("recoil", 5));
 
 
 }
