@@ -1,0 +1,6 @@
+# Sound License
+The sounds in this directoy are available under different Creative Commons Licenses.
+If you want to reuse them, make sure to consider the respective licensing terms.
+
+## Attribution
+"Musket Shot": aaronsiler_musket 2.wav by aaronsiler -- https://freesound.org/people/aaronsiler/sounds/128978/ -- License: CC Attribution 4.0
