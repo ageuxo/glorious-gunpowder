@@ -1,5 +1,5 @@
 # Sound License
-The sounds in this directoy are available under different Creative Commons Licenses.
+The sounds in this directory are available under different Creative Commons Licenses.
 If you want to reuse them, make sure to consider the respective licensing terms.
 
 ## Attribution
