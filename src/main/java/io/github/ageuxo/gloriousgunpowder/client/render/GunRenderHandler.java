@@ -7,7 +7,7 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 
-public class ClientEventHandler {
+public class GunRenderHandler {
     private float recoil;
     private float recoilProgress;
     @SubscribeEvent
