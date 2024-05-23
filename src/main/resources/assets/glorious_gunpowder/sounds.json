@@ -1,0 +1,8 @@
+{
+  "entity.gun_shot": {
+    "sounds": [
+      "glorious_gunpowder:cc/entity/musket_shot"
+    ],
+    "subtitle": "subtitles.glorious_gunpowder.gun_shot"
+  }
+}
