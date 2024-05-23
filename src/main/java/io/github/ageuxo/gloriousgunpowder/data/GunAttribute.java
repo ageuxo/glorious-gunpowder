@@ -2,31 +2,31 @@ package io.github.ageuxo.gloriousgunpowder.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.ageuxo.gloriousgunpowder.GunRegistries;
+import io.github.ageuxo.gloriousgunpowder.data.stats.GunStat;
+import io.github.ageuxo.gloriousgunpowder.data.stats.GunStatModifier;
+import io.github.ageuxo.gloriousgunpowder.data.stats.GunStatsMap;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 
-public record GunAttribute(float damage, float accuracy, float reloadSpeed, float velocity, float recoil) {
+import java.util.List;
+
+public record GunAttribute(String stat, double value) {
     public static final Codec<GunAttribute> CODEC = RecordCodecBuilder.create(instance ->
-            instance.group(
-                    Codec.FLOAT.fieldOf("damage").forGetter(GunAttribute::damage),
-                    Codec.FLOAT.fieldOf("accuracy").forGetter(GunAttribute::accuracy),
-                    Codec.FLOAT.fieldOf("reloadSpeed").forGetter(GunAttribute::reloadSpeed),
-                    Codec.FLOAT.fieldOf("velocity").forGetter(GunAttribute::velocity),
-                    Codec.FLOAT.fieldOf("recoil").forGetter(GunAttribute::recoil)
-            ).apply(instance, GunAttribute::new));
-    public static final StreamCodec<RegistryFriendlyByteBuf, GunAttribute> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.FLOAT,
-            GunAttribute::damage,
-            ByteBufCodecs.FLOAT,
-            GunAttribute::accuracy,
-            ByteBufCodecs.FLOAT,
-            GunAttribute::reloadSpeed,
-            ByteBufCodecs.FLOAT,
-            GunAttribute::velocity,
-            ByteBufCodecs.FLOAT,
-            GunAttribute::recoil,
-            GunAttribute::new
 
+            instance.group(
+                    Codec.STRING.fieldOf("stat").forGetter(GunAttribute::stat),
+                    Codec.DOUBLE.fieldOf("value").forGetter(GunAttribute::value)
+            ).apply(instance, GunAttribute::new));
+    public static final Codec<List<GunAttribute>> LIST_CODEC = CODEC.listOf();
+    public static final StreamCodec<RegistryFriendlyByteBuf, GunAttribute> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.STRING_UTF8,
+            GunAttribute::stat,
+            ByteBufCodecs.DOUBLE,
+            GunAttribute::value,
+            GunAttribute::new
     );
 }
