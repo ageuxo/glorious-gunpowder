@@ -13,7 +13,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
-
+//TODO: replace with something even more better
 public record GunAttribute(String stat, double value) {
     public static final Codec<GunAttribute> CODEC = RecordCodecBuilder.create(instance ->
 
