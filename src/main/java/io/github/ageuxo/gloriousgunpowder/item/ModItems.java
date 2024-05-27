@@ -23,6 +23,7 @@ public class ModItems {
     private static final Set<DeferredHolder<Item, ? extends Item>> GUN_TAB_ITEMS = new HashSet<>();
     public static final DeferredItem<BaseBulletItem> BULLET_ITEM = registerItem("bullet", () -> new BaseBulletItem(new Item.Properties().stacksTo(16)));
     public static final DeferredItem<BasicFirearm> BASIC_FIREARM = registerItem("basic_firearm", () -> new BasicFirearm(new Item.Properties().durability(60)));
+    public static final DeferredItem<ComponentFirearm> COMPONENT_FIREARM = registerItem("component_firearm", ()->new ComponentFirearm(new Item.Properties()));
 
     public static void register(IEventBus bus) {
         ITEMS.register(bus);

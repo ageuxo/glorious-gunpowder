@@ -1,17 +1,25 @@
 package io.github.ageuxo.gloriousgunpowder;
 
+import io.github.ageuxo.gloriousgunpowder.client.render.GunRenderer;
 import io.github.ageuxo.gloriousgunpowder.models.GunPartGeometryLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 
 import java.util.Map;
 
 public class ClientModBusEvents {
     public static final String MODEL_PATH_PREFIX = GloriousGunpowderMod.MOD_ID;
+
+    @SubscribeEvent
+    public static void clientSetup(FMLClientSetupEvent event){
+        Minecraft minecraft = Minecraft.getInstance();
+        GunRenderer.INSTANCE = new GunRenderer(minecraft.getBlockEntityRenderDispatcher(), minecraft.getEntityModels());
+    }
 
     @SubscribeEvent
     public static void modelRegistry(ModelEvent.RegisterAdditional event){
