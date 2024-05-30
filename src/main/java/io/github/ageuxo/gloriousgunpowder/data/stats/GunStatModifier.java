@@ -4,15 +4,15 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.ageuxo.gloriousgunpowder.GunRegistries;
 
-public record GunStatModifier(GunStat gunStat, Type type, double value) {
+public record GunStatModifier(GunStat gunStat, Type type, float value) {
 
     public static final Codec<GunStatModifier> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             GunRegistries.GUN_STATS.byNameCodec().fieldOf("stat").forGetter(GunStatModifier::gunStat),
             Codec.STRING.fieldOf("type").forGetter(GunStatModifier::typeId),
-            Codec.DOUBLE.fieldOf("value").forGetter(GunStatModifier::value)
+            Codec.FLOAT.fieldOf("value").forGetter(GunStatModifier::value)
     ).apply(instance, GunStatModifier::new));
 
-    public GunStatModifier(GunStat gunStat, String typeId, double value){
+    public GunStatModifier(GunStat gunStat, String typeId, float value){
         this(gunStat, Type.valueOf(typeId),  value);
     }
 

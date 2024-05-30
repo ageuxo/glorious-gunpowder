@@ -27,7 +27,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     public static final TagKey<Item> BULLET = ItemTags.create(GloriousGunpowderMod.rl("bullet"));
 
     @Override
-    protected void addTags(HolderLookup.Provider provider) {
+    protected void addTags(HolderLookup.@NotNull Provider provider) {
         tag(BULLET).add(ModItems.BULLET_ITEM.get());
     }
 }

@@ -119,7 +119,7 @@ public class BaseFirearm extends ProjectileWeaponItem {
             vector3f = getProjectileShotVector(pShooter, new Vec3(d0, d3, d1), pAngle);
         } else {
             Vec3 vec3 = pShooter.getUpVector(1.0F);
-            Quaternionf quaternionf = new Quaternionf().setAngleAxis( (pAngle * (float) (Math.PI / 180.0)), vec3.x, vec3.y, vec3.z);
+            Quaternionf quaternionf = new Quaternionf().setAngleAxis( (Math.toRadians(pAngle)), vec3.x, vec3.y, vec3.z);
             Vec3 vec31 = pShooter.getViewVector(1.0F);
             vector3f = vec31.toVector3f().rotate(quaternionf);
         }
@@ -136,7 +136,7 @@ public class BaseFirearm extends ProjectileWeaponItem {
         }
 
         Vector3f vector3f2 = new Vector3f(vector3f).rotateAxis((float) (Math.PI / 2), vector3f1.x, vector3f1.y, vector3f1.z);
-        return new Vector3f(vector3f).rotateAxis(pAngle * (float) (Math.PI / 180.0), vector3f2.x, vector3f2.y, vector3f2.z);
+        return new Vector3f(vector3f).rotateAxis((float) Math.toRadians(pAngle), vector3f2.x, vector3f2.y, vector3f2.z);
     }
     @Override
     public void releaseUsing(@NotNull ItemStack pStack, @NotNull Level pLevel, @NotNull LivingEntity pEntityLiving, int pTimeLeft) {
@@ -202,10 +202,10 @@ public class BaseFirearm extends ProjectileWeaponItem {
                 }
             }
         }
-        return new GunAttribute(stat.name(), stat.defaultValue());
+        return new GunAttribute(stat.name(), (float) stat.defaultValue());
     }
     public float getGunAttributeValue(ItemStack stack, GunStat stat) {
-        return (float) getGunAttribute(stack, stat).value();
+        return getGunAttribute(stack, stat).value();
     }
 
 

@@ -7,15 +7,15 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
 
-public record GunStat(String name, double defaultValue) {
+public record GunStat(String name, float defaultValue) {
 
     public static final ResourceKey<Registry<GunStat>> KEY = ResourceKey.createRegistryKey(GloriousGunpowderMod.rl("gunstat"));
 
-    public GunStatModifier additionMod(double value){
+    public GunStatModifier additionMod(float value){
         return new GunStatModifier(this, GunStatModifier.Type.ADDITION, value);
     }
 
-    public GunStatModifier multiplierMod(double value){
+    public GunStatModifier multiplierMod(float value){
         return new GunStatModifier(this, GunStatModifier.Type.MULTIPLIER, value);
     }
 

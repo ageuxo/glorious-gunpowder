@@ -35,19 +35,19 @@ public class PartShapeProvider extends DatapackBuiltinEntriesProvider {
     public static void bootstrap(BootstrapContext<PartShape> context){
         context.register(STANDARD_STOCK, new PartShape(STANDARD_STOCK,
                 List.of(
-                        new GunStatModifier(GunStats.ACCURACY.get(), GunStatModifier.Type.MULTIPLIER, 1.2),
-                        new GunStatModifier(GunStats.RELOAD_TIME.get(), GunStatModifier.Type.ADDITION, -1),
-                        new GunStatModifier(GunStats.RECOIL.get(), GunStatModifier.Type.ADDITION, -1)
+                        new GunStatModifier(GunStats.ACCURACY.get(), GunStatModifier.Type.MULTIPLIER, 1.2f),
+                        new GunStatModifier(GunStats.RELOAD_TIME.get(), GunStatModifier.Type.ADDITION, -1f),
+                        new GunStatModifier(GunStats.RECOIL.get(), GunStatModifier.Type.ADDITION, -1f)
         )));
         context.register(UNRIFLED_BARREL, new PartShape(UNRIFLED_BARREL,
                 List.of(
-                        new GunStatModifier(GunStats.ACCURACY.get(), GunStatModifier.Type.MULTIPLIER, 0.4),
-                        new GunStatModifier(GunStats.RELOAD_TIME.get(), GunStatModifier.Type.ADDITION, -3)
+                        new GunStatModifier(GunStats.ACCURACY.get(), GunStatModifier.Type.MULTIPLIER, 0.4f),
+                        new GunStatModifier(GunStats.RELOAD_TIME.get(), GunStatModifier.Type.ADDITION, -3f)
                 )));
         context.register(MATCHLOCK, new PartShape(MATCHLOCK,
                 List.of(
-                        new GunStatModifier(GunStats.DAMAGE.get(), GunStatModifier.Type.MULTIPLIER, 0.8),
-                        new GunStatModifier(GunStats.RELOAD_TIME.get(), GunStatModifier.Type.ADDITION, 2)
+                        new GunStatModifier(GunStats.DAMAGE.get(), GunStatModifier.Type.MULTIPLIER, 0.8f),
+                        new GunStatModifier(GunStats.RELOAD_TIME.get(), GunStatModifier.Type.ADDITION, 2f)
                 )));
     }
 
