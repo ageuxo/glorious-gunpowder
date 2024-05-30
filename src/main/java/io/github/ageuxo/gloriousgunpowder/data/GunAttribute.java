@@ -2,15 +2,9 @@ package io.github.ageuxo.gloriousgunpowder.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.github.ageuxo.gloriousgunpowder.GunRegistries;
-import io.github.ageuxo.gloriousgunpowder.data.stats.GunStat;
-import io.github.ageuxo.gloriousgunpowder.data.stats.GunStatModifier;
-import io.github.ageuxo.gloriousgunpowder.data.stats.GunStatsMap;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 //TODO: replace with something even more better

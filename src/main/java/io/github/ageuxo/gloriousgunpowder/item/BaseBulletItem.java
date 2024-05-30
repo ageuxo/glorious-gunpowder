@@ -9,6 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileItem;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public class BaseBulletItem extends Item implements ProjectileItem {
     public BaseBulletItem(Properties pProperties) {
@@ -16,7 +17,7 @@ public class BaseBulletItem extends Item implements ProjectileItem {
     }
     //This should ideally never be used as it doesn't make sense for bullets to be used by anything that isnt a gun, but we provide a generic bullet damage
     @Override
-    public Projectile asProjectile(Level pLevel, Position pPos, ItemStack pStack, Direction pDirection) {
+    public @NotNull Projectile asProjectile(@NotNull Level pLevel, Position pPos, @NotNull ItemStack pStack, @NotNull Direction pDirection) {
         return new BulletProjectile(pLevel, 5f, pPos.x(), pPos.y(), pPos.z());
     }
     public BulletProjectile createBullet(Level pLevel, float damage, LivingEntity pShooter) {

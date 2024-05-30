@@ -7,7 +7,7 @@ import net.neoforged.bus.api.Event;
 public class GunFiredEvent extends Event {
 
     private final LivingEntity shooter;
-    private ItemStack gun;
+    private final ItemStack gun;
     public GunFiredEvent(LivingEntity shooter, ItemStack gun) {
         this.shooter = shooter;
         this.gun = gun;

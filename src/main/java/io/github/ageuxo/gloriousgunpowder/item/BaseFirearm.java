@@ -1,24 +1,19 @@
 package io.github.ageuxo.gloriousgunpowder.item;
 
-import io.github.ageuxo.gloriousgunpowder.GunRegistries;
 import io.github.ageuxo.gloriousgunpowder.client.sound.ModSounds;
 import io.github.ageuxo.gloriousgunpowder.data.GunAttribute;
-import io.github.ageuxo.gloriousgunpowder.data.GunComponents;
 import io.github.ageuxo.gloriousgunpowder.data.GunDataComponents;
 import io.github.ageuxo.gloriousgunpowder.data.stats.GunStat;
 import io.github.ageuxo.gloriousgunpowder.data.stats.GunStats;
 import io.github.ageuxo.gloriousgunpowder.datagen.ItemTagProvider;
 import io.github.ageuxo.gloriousgunpowder.entity.projectile.BulletProjectile;
 import io.github.ageuxo.gloriousgunpowder.event.GunEventFactory;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,18 +30,17 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public abstract class AbstractFirearm extends ProjectileWeaponItem {
+public class BaseFirearm extends ProjectileWeaponItem {
     private boolean startSoundPlayed = false;
     private boolean midLoadSoundPlayed = false;
-    public AbstractFirearm(Properties pProperties) {
+    public BaseFirearm(Properties pProperties) {
         super(pProperties.stacksTo(1));
     }
     @Override
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pHand) {
         ItemStack gun = pPlayer.getItemInHand(pHand);
         if (isReloaded(gun)) {
             float velocity = getGunAttributeValue(gun, GunStats.VELOCITY.get());
@@ -62,7 +56,7 @@ public abstract class AbstractFirearm extends ProjectileWeaponItem {
         }
     }
     @Override
-    public void onUseTick(Level pLevel, LivingEntity pLivingEntity, ItemStack pStack, int pCount) {
+    public void onUseTick(Level pLevel, @NotNull LivingEntity pLivingEntity, @NotNull ItemStack pStack, int pCount) {
         if (!pLevel.isClientSide) {
             SoundEvent initialSoundEvent = SoundEvents.NOTE_BLOCK_GUITAR.value();
             SoundEvent middleSoundEvent = SoundEvents.NOTE_BLOCK_BANJO.value();
@@ -77,7 +71,7 @@ public abstract class AbstractFirearm extends ProjectileWeaponItem {
                 pLevel.playSound(null, pLivingEntity.getX(), pLivingEntity.getY(), pLivingEntity.getZ(), initialSoundEvent, SoundSource.PLAYERS, 0.5F, 1.0F);
             }
 
-            if (f >= 0.5F && middleSoundEvent != null && !this.midLoadSoundPlayed) {
+            if (f >= 0.5F && !this.midLoadSoundPlayed) {
                 this.midLoadSoundPlayed = true;
                 pLevel.playSound(null, pLivingEntity.getX(), pLivingEntity.getY(), pLivingEntity.getZ(), middleSoundEvent, SoundSource.PLAYERS, 0.5F, 1.0F);
             }
@@ -100,19 +94,19 @@ public abstract class AbstractFirearm extends ProjectileWeaponItem {
         }
     }
     @Override
-    protected Projectile createProjectile(Level pLevel, LivingEntity pShooter, ItemStack pWeapon, ItemStack pAmmo, boolean pIsCrit) {;
+    protected @NotNull Projectile createProjectile(@NotNull Level pLevel, @NotNull LivingEntity pShooter, @NotNull ItemStack pWeapon, @NotNull ItemStack pAmmo, boolean pIsCrit) {;
         float damage = getGunAttributeValue(pWeapon, GunStats.DAMAGE.get());
         return new BulletProjectile(pLevel, pShooter, damage);
     }
     @Override
-    public int getUseDuration(ItemStack pStack) {
-        float reloadSpeed = getGunAttributeValue(pStack, GunStats.ACCURACY.get());
-        return (int) (reloadSpeed * 20 + 3);
+    public int getUseDuration(@NotNull ItemStack pStack) {
+        float reloadSpeed = getGunAttributeValue(pStack, GunStats.RELOAD_TIME.get());
+        return (int) (reloadSpeed * 20);
     }
 
     @Override
     protected void shootProjectile(
-            LivingEntity pShooter, Projectile pProjectile, int pIndex, float pVelocity, float pInaccuracy, float pAngle, @Nullable LivingEntity pTarget
+            LivingEntity pShooter, @NotNull Projectile pProjectile, int pIndex, float pVelocity, float pInaccuracy, float pAngle, @Nullable LivingEntity pTarget
     ) {
         ItemStack gun = pShooter.getItemInHand(InteractionHand.MAIN_HAND);
         float accuracy = getGunAttributeValue(gun, GunStats.ACCURACY.get()) * 10;
@@ -125,12 +119,12 @@ public abstract class AbstractFirearm extends ProjectileWeaponItem {
             vector3f = getProjectileShotVector(pShooter, new Vec3(d0, d3, d1), pAngle);
         } else {
             Vec3 vec3 = pShooter.getUpVector(1.0F);
-            Quaternionf quaternionf = new Quaternionf().setAngleAxis((double)(pAngle * (float) (Math.PI / 180.0)), vec3.x, vec3.y, vec3.z);
+            Quaternionf quaternionf = new Quaternionf().setAngleAxis( (pAngle * (float) (Math.PI / 180.0)), vec3.x, vec3.y, vec3.z);
             Vec3 vec31 = pShooter.getViewVector(1.0F);
             vector3f = vec31.toVector3f().rotate(quaternionf);
         }
 
-        pProjectile.shoot((double)vector3f.x(), (double)vector3f.y(), (double)vector3f.z(), pVelocity,  1 / accuracy);
+        pProjectile.shoot(vector3f.x(), vector3f.y(), vector3f.z(), pVelocity,  1 / accuracy);
     }
 
     private static Vector3f getProjectileShotVector(LivingEntity pShooter, Vec3 pDistance, float pAngle) {
@@ -145,7 +139,7 @@ public abstract class AbstractFirearm extends ProjectileWeaponItem {
         return new Vector3f(vector3f).rotateAxis(pAngle * (float) (Math.PI / 180.0), vector3f2.x, vector3f2.y, vector3f2.z);
     }
     @Override
-    public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving, int pTimeLeft) {
+    public void releaseUsing(@NotNull ItemStack pStack, @NotNull Level pLevel, @NotNull LivingEntity pEntityLiving, int pTimeLeft) {
         float reloadDuration = this.getUseDuration(pStack) - pTimeLeft;
         boolean canReload = reloadDuration / getUseDuration(pStack) > 1;
         if (canReload && !isReloaded(pStack) && tryLoadBullet(pEntityLiving, pStack)) {
@@ -182,7 +176,7 @@ public abstract class AbstractFirearm extends ProjectileWeaponItem {
     }
 
     @Override
-    public Predicate<ItemStack> getAllSupportedProjectiles() {
+    public @NotNull Predicate<ItemStack> getAllSupportedProjectiles() {
         return item -> item.is(ItemTagProvider.BULLET);
     }
     @Override
@@ -194,14 +188,10 @@ public abstract class AbstractFirearm extends ProjectileWeaponItem {
         return pStack.is(this);
     }
     @Override
-    public UseAnim getUseAnimation(ItemStack pStack) {
+    public @NotNull UseAnim getUseAnimation(ItemStack pStack) {
         return UseAnim.SPEAR;
     }
 
-    public void setGunAttributes(ItemStack stack, GunAttribute... gunAttributes) {
-        List<GunAttribute> existingGunAttributes = new ArrayList<>(List.of(gunAttributes));
-        stack.set(GunDataComponents.GUN_ATTRIBUTES.get(), existingGunAttributes);
-    }
     public GunAttribute getGunAttribute(ItemStack stack, GunStat stat) {
         String id = stat.name();
         List<GunAttribute> currentAttributes = stack.get(GunDataComponents.GUN_ATTRIBUTES);
@@ -216,11 +206,6 @@ public abstract class AbstractFirearm extends ProjectileWeaponItem {
     }
     public float getGunAttributeValue(ItemStack stack, GunStat stat) {
         return (float) getGunAttribute(stack, stat).value();
-    }
-    public void setNewComponents(ItemStack stack, GunComponents... components) {
-        List<GunComponents> existingComponentData = new ArrayList<>(stack.getOrDefault(GunDataComponents.GUN_COMPONENTS.get(), new ArrayList<>()));
-        existingComponentData.addAll(List.of(components));
-        stack.set(GunDataComponents.GUN_COMPONENTS.get(), existingComponentData);
     }
 
 

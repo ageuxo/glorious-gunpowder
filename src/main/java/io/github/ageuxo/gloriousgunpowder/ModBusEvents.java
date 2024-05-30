@@ -1,18 +1,15 @@
 package io.github.ageuxo.gloriousgunpowder;
 
-import io.github.ageuxo.gloriousgunpowder.client.render.BulletRenderer;
 import io.github.ageuxo.gloriousgunpowder.data.Material;
 import io.github.ageuxo.gloriousgunpowder.data.PartShape;
 import io.github.ageuxo.gloriousgunpowder.datagen.ItemTagProvider;
 import io.github.ageuxo.gloriousgunpowder.datagen.MaterialProvider;
 import io.github.ageuxo.gloriousgunpowder.datagen.ModBlockTagsProvider;
 import io.github.ageuxo.gloriousgunpowder.datagen.PartShapeProvider;
-import io.github.ageuxo.gloriousgunpowder.entity.ModEntities;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
