@@ -5,9 +5,8 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.NeoForge;
 
 public class GunEventFactory {
-    public static GunFiredEvent fireGunEvent(LivingEntity shooter, ItemStack gun) {
+    public static void fireGunEvent(LivingEntity shooter, ItemStack gun) {
         GunFiredEvent event = new GunFiredEvent(shooter, gun);
         NeoForge.EVENT_BUS.post(event);
-        return event;
     }
 }

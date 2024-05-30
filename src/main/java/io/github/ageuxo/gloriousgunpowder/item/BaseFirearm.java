@@ -94,7 +94,7 @@ public class BaseFirearm extends ProjectileWeaponItem {
         }
     }
     @Override
-    protected @NotNull Projectile createProjectile(@NotNull Level pLevel, @NotNull LivingEntity pShooter, @NotNull ItemStack pWeapon, @NotNull ItemStack pAmmo, boolean pIsCrit) {;
+    protected @NotNull Projectile createProjectile(@NotNull Level pLevel, @NotNull LivingEntity pShooter, @NotNull ItemStack pWeapon, @NotNull ItemStack pAmmo, boolean pIsCrit) {
         float damage = getGunAttributeValue(pWeapon, GunStats.DAMAGE.get());
         return new BulletProjectile(pLevel, pShooter, damage);
     }
@@ -188,7 +188,7 @@ public class BaseFirearm extends ProjectileWeaponItem {
         return pStack.is(this);
     }
     @Override
-    public @NotNull UseAnim getUseAnimation(ItemStack pStack) {
+    public @NotNull UseAnim getUseAnimation(@NotNull ItemStack pStack) {
         return UseAnim.SPEAR;
     }
 
@@ -202,7 +202,7 @@ public class BaseFirearm extends ProjectileWeaponItem {
                 }
             }
         }
-        return new GunAttribute(stat.name(), (float) stat.defaultValue());
+        return new GunAttribute(stat.name(), stat.defaultValue());
     }
     public float getGunAttributeValue(ItemStack stack, GunStat stat) {
         return getGunAttribute(stack, stat).value();
