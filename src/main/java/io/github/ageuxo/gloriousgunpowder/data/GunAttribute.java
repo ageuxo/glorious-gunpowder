@@ -7,7 +7,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
 import java.util.List;
-//TODO: replace with something even more better
 public record GunAttribute(String stat, float value) {
     public static final Codec<GunAttribute> CODEC = RecordCodecBuilder.create(instance ->
 
