@@ -1,7 +1,6 @@
 package io.github.ageuxo.gloriousgunpowder.entity.projectile;
 
 import io.github.ageuxo.gloriousgunpowder.entity.ModEntities;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;

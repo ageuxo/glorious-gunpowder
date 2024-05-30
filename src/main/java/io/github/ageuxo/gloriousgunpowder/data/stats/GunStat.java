@@ -4,7 +4,6 @@ import io.github.ageuxo.gloriousgunpowder.GloriousGunpowderMod;
 import io.github.ageuxo.gloriousgunpowder.GunRegistries;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
 
 public record GunStat(String name, float defaultValue) {
