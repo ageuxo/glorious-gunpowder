@@ -11,9 +11,8 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.resources.ResourceLocation;
@@ -22,11 +21,13 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class GunRenderer extends BlockEntityWithoutLevelRenderer {
+    public static final List<ResourceLocation> MODEL_LOCATIONS = new ArrayList<>();
     public static final Map<ResourceLocation, BakedModel> MODEL_CACHE = new HashMap<>();
     public static GunRenderer INSTANCE;
 
@@ -38,16 +39,16 @@ public class GunRenderer extends BlockEntityWithoutLevelRenderer {
     public void renderByItem(@NotNull ItemStack pStack, @NotNull ItemDisplayContext pDisplayContext, @NotNull PoseStack pPoseStack, @NotNull MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
         List<GunComponents> components = pStack.getComponents().get(GunDataComponents.GUN_COMPONENTS.get());
         Minecraft minecraft = Minecraft.getInstance();
-        ItemRenderer itemRenderer = minecraft.getItemRenderer();
+        ModelBlockRenderer modelRenderer = minecraft.getBlockRenderer().getModelRenderer();
         ClientLevel level = minecraft.level;
         if (components != null && level != null){
-            pPoseStack.pushPose();
             VertexConsumer consumer = pBuffer.getBuffer(RenderType.cutout());
+            pPoseStack.pushPose();
             for (GunComponents component : components){
                 BakedModel partModel = MODEL_CACHE.computeIfAbsent(component.shape(), GunRenderer::modelFromPartLocation);
-                List<BakedQuad> quads = partModel.getQuads(null, null, level.getRandom(), ModelData.EMPTY, RenderType.cutout());
+                partModel = partModel.applyTransform(pDisplayContext, pPoseStack, false);
                 pPoseStack.pushPose();
-                itemRenderer.renderQuadList(pPoseStack, consumer, quads, pStack, pPackedLight, pPackedOverlay);
+                modelRenderer.renderModel(pPoseStack.last(), consumer, null, partModel, 1f, 1f, 1f, pPackedLight, pPackedOverlay, ModelData.EMPTY, RenderType.cutout());
 
                 pPoseStack.popPose();
             }
@@ -56,7 +57,7 @@ public class GunRenderer extends BlockEntityWithoutLevelRenderer {
     }
 
     public static BakedModel modelFromPartLocation(ResourceLocation partLocation){
-        ResourceLocation modelLocation = partLocation.withPrefix(GloriousGunpowderMod.MOD_ID);
+        ResourceLocation modelLocation = partLocation.withPrefix(GloriousGunpowderMod.MOD_ID+"/");
         ModelManager manager = Minecraft.getInstance().getModelManager();
         return manager.getModel(modelLocation);
     }

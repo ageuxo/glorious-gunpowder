@@ -13,7 +13,7 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 import java.util.Map;
 
 public class ClientModBusEvents {
-    public static final String MODEL_PATH_PREFIX = GloriousGunpowderMod.MOD_ID;
+    public static final String MODEL_PATH_PREFIX = "models/"+GloriousGunpowderMod.MOD_ID;
 
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event){
@@ -23,10 +23,14 @@ public class ClientModBusEvents {
 
     @SubscribeEvent
     public static void modelRegistry(ModelEvent.RegisterAdditional event){
-        FileToIdConverter modelFinder = new  FileToIdConverter(MODEL_PATH_PREFIX, "");
+        FileToIdConverter modelFinder = FileToIdConverter.json(MODEL_PATH_PREFIX);
         Map<ResourceLocation, Resource> map = modelFinder.listMatchingResources(Minecraft.getInstance().getResourceManager());
         for (Map.Entry<ResourceLocation, Resource> entry : map.entrySet()){
-            event.register(entry.getKey());
+            ResourceLocation location = entry.getKey();
+            String path = location.getPath().replaceFirst("\\.json", "").replaceFirst("models/", "");
+            ResourceLocation resourceLocation = new ResourceLocation(location.getNamespace(), path);
+            GunRenderer.MODEL_LOCATIONS.add(resourceLocation);
+            event.register(resourceLocation);
         }
     }
 
