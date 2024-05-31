@@ -1,7 +1,6 @@
 package io.github.ageuxo.gloriousgunpowder.entity.projectile;
 
 import io.github.ageuxo.gloriousgunpowder.entity.ModEntities;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -21,6 +20,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class BulletProjectile extends Projectile {
     private static final EntityDataAccessor<Float> DATA_DAMAGE = SynchedEntityData.defineId(
@@ -39,7 +39,7 @@ public class BulletProjectile extends Projectile {
         this.damage = damage;
     }
     @Override
-    public Vec3 getMovementToShoot(double pX, double pY, double pZ, float pVelocity, float pInaccuracy) {
+    public @NotNull Vec3 getMovementToShoot(double pX, double pY, double pZ, float pVelocity, float pInaccuracy) {
         return new Vec3(pX, pY, pZ)
                 .normalize()
                 .add(
@@ -47,7 +47,7 @@ public class BulletProjectile extends Projectile {
                         random.triangle(0, pInaccuracy * random.nextFloat()),
                         random.triangle(0, pInaccuracy * random.nextFloat())
                 )
-                .scale((double)pVelocity);
+                .scale(pVelocity);
     }
 
 
@@ -89,7 +89,6 @@ public class BulletProjectile extends Projectile {
         float f;
         if (this.isInWater()) {
             for (int i = 0; i < 4; i++) {
-                float f1 = 0.25F;
                 this.level().addParticle(ParticleTypes.BUBBLE, d2 - vec3.x * 0.25, d0 - vec3.y * 0.25, d1 - vec3.z * 0.25, vec3.x, vec3.y, vec3.z);
             }
 
@@ -98,13 +97,13 @@ public class BulletProjectile extends Projectile {
             f = 0.99F;
         }
 
-        this.setDeltaMovement(vec3.scale((double)f));
+        this.setDeltaMovement(vec3.scale(f));
         this.applyGravity();
         this.setPos(d2, d0, d1);
 
     }
     @Override
-    protected void onHitEntity(EntityHitResult pResult) {
+    protected void onHitEntity(@NotNull EntityHitResult pResult) {
         super.onHitEntity(pResult);
         pResult.getEntity().hurt(this.damageSources().mobProjectile( this, (LivingEntity) this.getOwner()), damage);
         this.discard();
@@ -115,13 +114,13 @@ public class BulletProjectile extends Projectile {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag pCompound) {
+    public void addAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
         pCompound.putFloat("damage", this.damage);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag pCompound) {
+    public void readAdditionalSaveData(@NotNull CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
         if (pCompound.contains("damage")) {
             this.damage = pCompound.getFloat("damage");

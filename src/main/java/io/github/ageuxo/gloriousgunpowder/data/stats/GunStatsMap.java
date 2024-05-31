@@ -4,7 +4,10 @@ import io.github.ageuxo.gloriousgunpowder.data.Material;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
 public class GunStatsMap {
     private final Map<GunStat, Map<GunStatModifier.Type, List<GunStatModifier>>> modifiers = new Object2ObjectOpenHashMap<>();

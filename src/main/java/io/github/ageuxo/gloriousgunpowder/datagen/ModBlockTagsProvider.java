@@ -4,6 +4,7 @@ import io.github.ageuxo.gloriousgunpowder.GloriousGunpowderMod;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
@@ -14,7 +15,7 @@ public class ModBlockTagsProvider extends net.neoforged.neoforge.common.data.Blo
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider pProvider) {
+    protected void addTags(HolderLookup.@NotNull Provider pProvider) {
 
     }
 }

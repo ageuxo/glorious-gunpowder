@@ -2,7 +2,7 @@ package io.github.ageuxo.gloriousgunpowder.client.render;
 
 import io.github.ageuxo.gloriousgunpowder.data.stats.GunStats;
 import io.github.ageuxo.gloriousgunpowder.event.GunFiredEvent;
-import io.github.ageuxo.gloriousgunpowder.item.AbstractFirearm;
+import io.github.ageuxo.gloriousgunpowder.item.BaseFirearm;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -35,7 +35,7 @@ public class GunRenderHandler {
     }
     @SubscribeEvent
     public void onGunFire(GunFiredEvent event) {
-        if(event.getShooter() instanceof AbstractClientPlayer && event.getGun().getItem() instanceof AbstractFirearm firearm) {
+        if(event.getShooter() instanceof AbstractClientPlayer && event.getGun().getItem() instanceof BaseFirearm firearm) {
             this.recoil = firearm.getGunAttributeValue(event.getGun(), GunStats.RECOIL.get());
         }
     }

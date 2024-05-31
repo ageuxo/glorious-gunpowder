@@ -7,30 +7,24 @@ import io.github.ageuxo.gloriousgunpowder.GloriousGunpowderMod;
 import io.github.ageuxo.gloriousgunpowder.client.BulletModel;
 import io.github.ageuxo.gloriousgunpowder.entity.ModEntities;
 import io.github.ageuxo.gloriousgunpowder.entity.projectile.BulletProjectile;
-import net.minecraft.client.model.Model;
-import net.minecraft.client.model.SkullModel;
-import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.entity.TntMinecartRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
 public class BulletRenderer<T extends BulletProjectile> extends EntityRenderer<T> {
     private static final ResourceLocation BULLET_LOCATION = GloriousGunpowderMod.rl("textures/entity/bullet.png");
-    private BulletModel<T> model;
+    private final BulletModel<T> model;
     public BulletRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
         this.model = new BulletModel<>(pContext.bakeLayer(ModEntities.BULLET));
     }
 
     @Override
-    public ResourceLocation getTextureLocation(T pEntity) {
+    public @NotNull ResourceLocation getTextureLocation(T pEntity) {
         return BULLET_LOCATION;
     }
 
