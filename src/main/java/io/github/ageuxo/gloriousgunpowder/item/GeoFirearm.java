@@ -6,6 +6,7 @@ import io.github.ageuxo.gloriousgunpowder.data.GunDataComponents;
 import io.github.ageuxo.gloriousgunpowder.datagen.MaterialProvider;
 import io.github.ageuxo.gloriousgunpowder.datagen.PartShapeProvider;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.world.item.Item;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
@@ -18,10 +19,10 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class GeoFirearm extends AbstractFirearm implements GeoItem {
+public class GeoFirearm extends BaseFirearm implements GeoItem {
     public final AnimatableInstanceCache animatableInstanceCache = GeckoLibUtil.createInstanceCache(this);
 
-    public GeoFirearm(Properties pProperties) {
+    public GeoFirearm(Item.Properties pProperties) {
         super(pProperties.component(GunDataComponents.GUN_COMPONENTS.get(),
                 List.of(
                         new GunComponents(MaterialProvider.WOOD.location(), PartShapeProvider.STANDARD_STOCK.location()),
