@@ -2,10 +2,7 @@ package io.github.ageuxo.gloriousgunpowder;
 
 import io.github.ageuxo.gloriousgunpowder.data.Material;
 import io.github.ageuxo.gloriousgunpowder.data.PartShape;
-import io.github.ageuxo.gloriousgunpowder.datagen.ItemTagProvider;
-import io.github.ageuxo.gloriousgunpowder.datagen.MaterialProvider;
-import io.github.ageuxo.gloriousgunpowder.datagen.ModBlockTagsProvider;
-import io.github.ageuxo.gloriousgunpowder.datagen.PartShapeProvider;
+import io.github.ageuxo.gloriousgunpowder.datagen.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -39,6 +36,7 @@ public class ModBusEvents {
         generator.addProvider(event.includeServer(), blockTagsProvider);
         generator.addProvider(event.includeServer(), new ItemTagProvider(output, lookup, blockTagsProvider.contentsGetter(), helper));
         generator.addProvider(true, new MaterialProvider(output, lookup));
-        generator.addProvider(true, new PartShapeProvider(output, lookup));
+        PartShapeProvider partShapeProvider = generator.addProvider(true, new PartShapeProvider(output, lookup));
+        generator.addProvider(true, new PartShapeTagProvider(output, partShapeProvider.getRegistryProvider(), helper));
     }
 }

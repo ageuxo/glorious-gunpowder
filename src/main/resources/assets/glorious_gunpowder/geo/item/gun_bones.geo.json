@@ -1,0 +1,45 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 16,
+				"texture_height": 16,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 1.5,
+				"visible_bounds_offset": [0, 0.25, 0]
+			},
+			"bones": [
+				{
+					"name": "root",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "lockworks",
+					"parent": "root",
+					"pivot": [0, 0, 0],
+					"locators": {
+						"locator": [0, 0, 0]
+					}
+				},
+				{
+					"name": "barrels",
+					"parent": "root",
+					"pivot": [0, 0, 0],
+					"locators": {
+						"locator2": [0, 0, -1]
+					}
+				},
+				{
+					"name": "stocks",
+					"parent": "root",
+					"pivot": [0, 0, 0],
+					"locators": {
+						"locator3": [0, 0, 1]
+					}
+				}
+			]
+		}
+	]
+}
