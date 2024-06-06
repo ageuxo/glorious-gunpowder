@@ -1,0 +1,59 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 16,
+				"texture_height": 16,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 1.5,
+				"visible_bounds_offset": [0, 0.25, 0]
+			},
+			"bones": [
+				{
+					"name": "root",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "lockworks",
+					"parent": "root",
+					"pivot": [-2, 1, 3],
+					"cubes": [
+						{"origin": [-1, 0, -3], "size": [2, 2, 6], "uv": [-4, -4]}
+					]
+				},
+				{
+					"name": "match",
+					"parent": "lockworks",
+					"pivot": [-1.5, 1.5, 2.5],
+					"cubes": [
+						{"origin": [-2, 1, 2], "size": [1, 3, 1], "uv": [2, 1]}
+					]
+				},
+				{
+					"name": "barrels",
+					"parent": "root",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-1, 0, -15], "size": [2, 2, 12], "uv": [-10, -10]}
+					]
+				},
+				{
+					"name": "stocks",
+					"parent": "root",
+					"pivot": [0, 0, 5]
+				},
+				{
+					"name": "standard",
+					"parent": "stocks",
+					"pivot": [0, 0, 4],
+					"cubes": [
+						{"origin": [-1, -1, 6], "size": [2, 3, 2], "uv": [1, 1]},
+						{"origin": [-1, 0, 3], "size": [2, 2, 3], "uv": [0, 0]}
+					]
+				}
+			]
+		}
+	]
+}
