@@ -5,7 +5,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.ageuxo.gloriousgunpowder.GloriousGunpowderMod;
+import io.github.ageuxo.gloriousgunpowder.data.GunDataComponents;
 import io.github.ageuxo.gloriousgunpowder.item.GeoFirearm;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -13,8 +15,10 @@ import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import software.bernie.geckolib.animation.AnimationState;
@@ -25,7 +29,10 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 import software.bernie.geckolib.util.Color;
 
+import java.util.Map;
+
 public class GunRenderer extends GeoItemRenderer<GeoFirearm> {
+    private static final Long2ObjectOpenHashMap<BoneGeoModel<GeoFirearm>> INSTANCE_2_MODEL_MAP = new Long2ObjectOpenHashMap<>();
     private final ModelBlockRenderer modelRenderer;
 
 
@@ -44,7 +51,7 @@ public class GunRenderer extends GeoItemRenderer<GeoFirearm> {
         float blue = renderColor.getBlueFloat();
         float alpha = renderColor.getAlphaFloat();
         int packedOverlay = getPackedOverlay(animatable, 0, partialTick);
-        BakedGeoModel model = getGeoModel().getBakedModel(getGeoModel().getModelResource(animatable));
+        BakedGeoModel model = getGeoModelForInstance(animatable).getBakedModel(getGeoModel().getModelResource(animatable));
 
         if (renderType == null)
             renderType = getRenderType(animatable, getTextureLocation(animatable), bufferSource, partialTick);
@@ -73,7 +80,7 @@ public class GunRenderer extends GeoItemRenderer<GeoFirearm> {
         if (!isReRender) {
             AnimationState<GeoFirearm> animationState = new AnimationState<>(animatable, 0, 0, partialTick, false);
             long instanceId = getInstanceId(animatable);
-            GeoModel<GeoFirearm> currentModel = getGeoModel();
+            GeoModel<GeoFirearm> currentModel = getGeoModelForInstance(instanceId);
 
             animationState.setData(DataTickets.TICK, animatable.getTick(this.currentItemStack));
             animationState.setData(DataTickets.ITEM_RENDER_PERSPECTIVE, this.renderPerspective);
@@ -93,6 +100,23 @@ public class GunRenderer extends GeoItemRenderer<GeoFirearm> {
                         packedOverlay, red, green, blue, alpha);
             }
         }
+    }
+
+    public BoneGeoModel<GeoFirearm> getGeoModelForInstance(GeoFirearm animatable) {
+        return getGeoModelForInstance(getInstanceId(animatable));
+    }
+
+    public BoneGeoModel<GeoFirearm> getGeoModelForInstance(long instanceId) {
+        return INSTANCE_2_MODEL_MAP.computeIfAbsent(instanceId, id -> createGeoModelForInstance(animatable));
+    }
+
+
+
+    private BoneGeoModel<GeoFirearm> createGeoModelForInstance(GeoFirearm animatable) {
+        BoneGeoModel<GeoFirearm> boneGeoModel = new BoneGeoModel<>(GloriousGunpowderMod.rl("gun_bones"));
+        Map<String, ResourceLocation> components = this.currentItemStack.getComponents().getOrDefault(GunDataComponents.MODEL_LOOKUP.get(), Map.of());
+        boneGeoModel.fetchModels(animatable, components);
+        return boneGeoModel;
     }
 
     @Override
@@ -141,12 +165,12 @@ public class GunRenderer extends GeoItemRenderer<GeoFirearm> {
             return;
         }
 
-        BoneGeoModel<GeoFirearm> boneGeoModel = (BoneGeoModel<GeoFirearm>) getGeoModel();
-        BakedModel bakedModel = boneGeoModel.get(bone);
+        BoneGeoModel<GeoFirearm> boneGeoModel = getGeoModelForInstance(this.animatable);
+        BakedModel bakedModel = boneGeoModel.getOrDefault(bone);
         if (bakedModel != null){
             this.modelRenderer.renderModel(poseStack.last(), buffer, null, bakedModel, red, green, blue, packedLight, packedOverlay);
         } else {
-            throw new RuntimeException("Attempted to render null model for bone: "+ bone + " in model: "+ boneGeoModel);
+            throw new RuntimeException("Attempted to render null model for bone: \""+ bone.getName() + "\" in model: "+ boneGeoModel);
         }
 
     }
@@ -154,5 +178,11 @@ public class GunRenderer extends GeoItemRenderer<GeoFirearm> {
     @Override
     public @Nullable RenderType getRenderType(GeoFirearm animatable, ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
         return RenderType.cutout();
+    }
+
+    @Override
+    public void onResourceManagerReload(@NotNull ResourceManager pResourceManager) {
+        INSTANCE_2_MODEL_MAP.clear();
+        super.onResourceManagerReload(pResourceManager);
     }
 }

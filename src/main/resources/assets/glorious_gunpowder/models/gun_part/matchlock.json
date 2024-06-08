@@ -1,0 +1,54 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "glorious_gunpowder:item/test_tinted"
+	},
+	"elements": [
+		{
+			"name": "part",
+			"from": [7, 0, 5],
+			"to": [9, 2, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [2, 2, 4, 4], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [-4, 2, 2, 4], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [10, 2, 12, 4], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [4, 2, 10, 4], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [4, 2, 2, -4], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [6, -4, 4, 2], "texture": "#0", "tintindex": 0}
+			}
+		},
+		{
+			"name": "match",
+			"from": [9, 1, 10],
+			"to": [10, 4, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [3, 2, 4, 5], "texture": "#0"},
+				"east": {"uv": [2, 2, 3, 5], "texture": "#0"},
+				"south": {"uv": [5, 2, 6, 5], "texture": "#0"},
+				"west": {"uv": [4, 2, 5, 5], "texture": "#0"},
+				"up": {"uv": [4, 2, 3, 1], "texture": "#0"},
+				"down": {"uv": [5, 1, 4, 2], "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "part",
+			"origin": [10, 1, 11],
+			"color": 0,
+			"nbt": "{}",
+			"children": [
+				0,
+				{
+					"name": "match",
+					"origin": [10, 1, 11],
+					"color": 1,
+					"nbt": "{}",
+					"children": [1]
+				}
+			]
+		}
+	]
+}

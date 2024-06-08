@@ -1,0 +1,22 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "glorious_gunpowder:item/test_tinted",
+		"particle": "glorious_gunpowder:item/test_tinted"
+	},
+	"elements": [
+		{
+			"from": [7, 0, 2],
+			"to": [9, 2, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [2, 2, 4, 4], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [-10, 2, 2, 4], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [16, 2, 18, 4], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [4, 2, 16, 4], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [4, 2, 2, -10], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [6, -10, 4, 2], "texture": "#0", "tintindex": 0}
+			}
+		}
+	]
+}
