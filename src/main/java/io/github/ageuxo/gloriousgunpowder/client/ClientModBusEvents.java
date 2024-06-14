@@ -1,5 +1,6 @@
 package io.github.ageuxo.gloriousgunpowder.client;
 
+import io.github.ageuxo.gloriousgunpowder.client.model.GroupGeometryLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceLocation;
@@ -22,5 +23,10 @@ public class ClientModBusEvents {
             ResourceLocation resourceLocation = new ResourceLocation(location.getNamespace(), path);
             event.register(resourceLocation);
         }
+    }
+
+    @SubscribeEvent
+    public static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event){
+        event.register(GroupGeometryLoader.ID, GroupGeometryLoader.INSTANCE);
     }
 }
