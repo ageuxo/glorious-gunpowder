@@ -1,8 +1,10 @@
 package io.github.ageuxo.gloriousgunpowder.client.model;
 
 import com.mojang.datafixers.util.Either;
+import com.mojang.math.Transformation;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.ageuxo.gloriousgunpowder.client.render.BoneGroupTransform;
 import net.minecraft.client.renderer.block.model.BlockElement;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.ExtraCodecs;
@@ -27,6 +29,7 @@ public final class BoneGroup {
     private final List<Either<Integer, BoneGroup>> children;
     private final List<BoneGroup> childBones = new ArrayList<>();
     private final List<Integer> elementIndices = new ArrayList<>();
+    private final BoneGroupTransform transform = new BoneGroupTransform();
     private BakedModel bakedModel;
 
     public BoneGroup(String name, Vector3f origin, List<Either<Integer, BoneGroup>> children) {
@@ -90,6 +93,14 @@ public final class BoneGroup {
         for (BoneGroup subGroup : group.getChildGroups()){
             recursiveUnroll(unrolled, subGroup);
         }
+    }
+
+    public Transformation buildTransform() {
+        return transform.build(this);
+    }
+
+    public BoneGroupTransform getTransform(){
+        return this.transform;
     }
 
     @Override
