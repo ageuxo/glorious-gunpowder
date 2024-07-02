@@ -34,12 +34,17 @@ public class GroupGeometry implements IUnbakedGeometry<GroupGeometry> {
         if (this.groups.isEmpty()){
             this.groups.add(new BoneGroup("root", new Vector3f(), List.of()));
         }
-        for (BoneGroup group : this.groups){
-            BakedModel bakedModel = new ElementsModel(group.bindElements(elements)).bake(context, baker, spriteGetter, modelState, overrides, modelLocation);
-            group.setBakedModel(bakedModel);
-        }
+        bakeGroups(context, baker, spriteGetter, modelState, overrides, modelLocation, elements, this.groups);
 
         return new GroupsModel(groups, context.useAmbientOcclusion(), context.isGui3d(), context.useBlockLight(), particle, overrides);
+    }
+
+    private void bakeGroups(@NotNull IGeometryBakingContext context, @NotNull ModelBaker baker, @NotNull Function<Material, TextureAtlasSprite> spriteGetter, @NotNull ModelState modelState, @NotNull ItemOverrides overrides, @NotNull ResourceLocation modelLocation, List<BlockElement> elements, List<BoneGroup> boneGroups) {
+        for (BoneGroup group : boneGroups){
+            BakedModel bakedModel = new ElementsModel(group.bindElements(elements)).bake(context, baker, spriteGetter, modelState, overrides, modelLocation);
+            group.setBakedModel(bakedModel);
+            bakeGroups(context, baker, spriteGetter, modelState, overrides, modelLocation, elements, group.getChildGroups());
+        }
     }
 
     @Override
