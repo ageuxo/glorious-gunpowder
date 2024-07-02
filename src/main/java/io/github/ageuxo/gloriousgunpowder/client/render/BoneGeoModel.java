@@ -24,6 +24,7 @@ public class BoneGeoModel<T extends GeoAnimatable> extends DefaultedGeoModel<T> 
     public static final ResourceLocation EMPTY_MODEL_LOCATION = GloriousGunpowderMod.rl("empty");
     private static BakedModel EMPTY_MODEL;
     private final Map<String, Either<BakedModel, GroupsModel>> name2ModelMap = new HashMap<>();
+    private final Map<String, String> animGetterMap = new HashMap<>();
     private final ResourceLocation assetSubPath;
 
     public BoneGeoModel(ResourceLocation assetSubpath) {
@@ -46,11 +47,12 @@ public class BoneGeoModel<T extends GeoAnimatable> extends DefaultedGeoModel<T> 
 
     @Override
     public Animation getAnimation(T animatable, String name) {
-        String[] lookup = name.split(":");
+        String[] lookup = name.split("\\.");
         if (lookup.length != 2){
-            throw new RuntimeException("BoneGeoModel attempted to get invalid animation. Supplied string should always contain exactly one \":\" to separate ResourceLocation path from animation name. String:\""+name+"\"");
+            throw new RuntimeException("BoneGeoModel attempted to get invalid animation. Supplied string should always contain exactly one \".\" to separate Bone name from animation name. String:\""+name+"\"");
         }
-        ResourceLocation baseLocation = new ResourceLocation(this.assetSubPath.getNamespace(), lookup[0]);
+        String animationName = animGetterMap.get(lookup[0]);
+        ResourceLocation baseLocation = new ResourceLocation(this.assetSubPath.getNamespace(), animationName);
         ResourceLocation location = buildFormattedAnimationPath(baseLocation);
         BakedAnimations bakedAnimations = GeckoLibCache.getBakedAnimations().get(location);
 
@@ -61,7 +63,7 @@ public class BoneGeoModel<T extends GeoAnimatable> extends DefaultedGeoModel<T> 
             throw GeckoLibConstants.exception(location, "Unable to find animation file.");
         }
 
-        return bakedAnimations.getAnimation(lookup[1]);
+        return bakedAnimations.getAnimation(animationName + "." + lookup[1]);
     }
 
     @Override
@@ -82,6 +84,7 @@ public class BoneGeoModel<T extends GeoAnimatable> extends DefaultedGeoModel<T> 
         var manager = Minecraft.getInstance().getModelManager();
         for (var entry : components.entrySet()){
             addModel(entry.getKey(), fetchModel(manager, entry.getValue()));
+            animGetterMap.put(entry.getKey(), entry.getValue().getPath());
         }
     }
 

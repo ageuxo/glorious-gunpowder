@@ -9,7 +9,11 @@ import io.github.ageuxo.gloriousgunpowder.datagen.PartShapeProvider;
 import io.github.ageuxo.gloriousgunpowder.datagen.PartShapeTagProvider;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
@@ -18,6 +22,7 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.HashMap;
@@ -27,6 +32,8 @@ import java.util.function.Consumer;
 
 public class GeoFirearm extends BaseFirearm implements GeoItem {
     private static final Map<String, ResourceLocation> TEST_MODEL_LOOKUP = createTestModelLookup();
+    private static final RawAnimation TRIGGER_ANIM = RawAnimation.begin().thenPlay("lockworks.trigger");
+    private static final RawAnimation REARM_ANIM = RawAnimation.begin().thenPlay("lockworks.rearm");
 
     @NotNull
     private static HashMap<String, ResourceLocation> createTestModelLookup() {
@@ -39,6 +46,7 @@ public class GeoFirearm extends BaseFirearm implements GeoItem {
     }
 
     public final AnimatableInstanceCache animatableInstanceCache = GeckoLibUtil.createInstanceCache(this);
+    public AnimationController<GeoFirearm> lockworks;
 
     public GeoFirearm(Item.Properties pProperties) {
         super(pProperties
@@ -70,11 +78,28 @@ public class GeoFirearm extends BaseFirearm implements GeoItem {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "lockworks", state -> PlayState.CONTINUE));
+        this.lockworks = new AnimationController<>(this, "lockworks", state -> PlayState.CONTINUE)
+                .triggerableAnim("lockworks.trigger", TRIGGER_ANIM)
+                .triggerableAnim("lockworks.rearm", REARM_ANIM);
+        controllers.add(this.lockworks);
     }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return animatableInstanceCache;
+    }
+
+    @Override
+    public void animateTrigger(Level level, LivingEntity livingEntity, ItemStack stack) {
+        if (level instanceof ServerLevel serverLevel){
+            triggerAnim(livingEntity, GeoItem.getOrAssignId(stack, serverLevel), "lockworks", "lockworks.trigger");
+        }
+    }
+
+    @Override
+    public void animateRearm(Level level, LivingEntity livingEntity, ItemStack stack) {
+        if (level instanceof ServerLevel serverLevel){
+            triggerAnim(livingEntity, GeoItem.getOrAssignId(stack, serverLevel), "lockworks", "lockworks.rearm");
+        }
     }
 }

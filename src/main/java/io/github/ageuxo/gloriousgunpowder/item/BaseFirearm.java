@@ -83,6 +83,7 @@ public class BaseFirearm extends ProjectileWeaponItem {
             if (chargedprojectiles != null && !chargedprojectiles.isEmpty()) {
                 GunEventFactory.fireGunEvent(pShooter, pWeapon);
                 this.shoot(pLevel, pShooter, pHand, pWeapon, chargedprojectiles.getItems(), pVelocity, pInaccuracy , pShooter instanceof Player, pTarget);
+                this.animateTrigger(pLevel, pShooter, pWeapon);
                 if (pShooter instanceof ServerPlayer serverplayer) {
                     serverplayer.awardStat(Stats.ITEM_USED.get(pWeapon.getItem()));
                 }
@@ -143,6 +144,7 @@ public class BaseFirearm extends ProjectileWeaponItem {
         float reloadDuration = this.getUseDuration(pStack) - pTimeLeft;
         boolean canReload = reloadDuration / getUseDuration(pStack) > 1;
         if (canReload && !isReloaded(pStack) && tryLoadBullet(pEntityLiving, pStack)) {
+            this.animateRearm(pLevel, pEntityLiving, pStack);
             pLevel.playSound(
                     null,
                     pEntityLiving.getX(),
@@ -208,6 +210,8 @@ public class BaseFirearm extends ProjectileWeaponItem {
         return getGunAttribute(stack, stat).value();
     }
 
+    public void animateTrigger(Level level, LivingEntity livingEntity, ItemStack stack){ }
 
+    public void animateRearm(Level level, LivingEntity livingEntity, ItemStack stack){ }
 
 }
