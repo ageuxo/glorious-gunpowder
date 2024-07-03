@@ -1,6 +1,7 @@
 package io.github.ageuxo.gloriousgunpowder;
 
 import io.github.ageuxo.gloriousgunpowder.block.ModBlocks;
+import io.github.ageuxo.gloriousgunpowder.client.ClientBusEvents;
 import io.github.ageuxo.gloriousgunpowder.client.ClientModBusEvents;
 import io.github.ageuxo.gloriousgunpowder.client.render.GunRenderHandler;
 import io.github.ageuxo.gloriousgunpowder.client.sound.ModSounds;
@@ -28,6 +29,7 @@ public class GloriousGunpowderMod {
         eventBus.register(ModBusEvents.class);
         if(FMLEnvironment.dist == Dist.CLIENT) {
             NeoForge.EVENT_BUS.register(new GunRenderHandler());
+            NeoForge.EVENT_BUS.register(ClientBusEvents.class);
             eventBus.register(ClientModBusEvents.class);
         }
     }
