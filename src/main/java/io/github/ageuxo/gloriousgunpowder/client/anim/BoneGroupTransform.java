@@ -1,7 +1,5 @@
-package io.github.ageuxo.gloriousgunpowder.client.render;
+package io.github.ageuxo.gloriousgunpowder.client.anim;
 
-import com.mojang.math.Transformation;
-import io.github.ageuxo.gloriousgunpowder.client.model.BoneGroup;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -11,22 +9,16 @@ import java.util.Objects;
 public final class BoneGroupTransform {
     private final Vector3f offset;
     private final Vector3f scale;
-    private final Quaternionf leftRot;
-    private final Quaternionf rightRot;
+    private final Quaternionf rotation;
 
     public BoneGroupTransform() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
-    public BoneGroupTransform(@Nullable Vector3f offset, @Nullable Vector3f scale, @Nullable Quaternionf leftRot, @Nullable Quaternionf rightRot) {
+    public BoneGroupTransform(@Nullable Vector3f offset, @Nullable Vector3f scale, @Nullable Quaternionf rotation) {
         this.offset = offset != null ? offset : new Vector3f();
         this.scale = scale != null ? scale : new Vector3f(1);
-        this.leftRot = leftRot != null ? leftRot : new Quaternionf();
-        this.rightRot = rightRot != null ? rightRot : new Quaternionf();
-    }
-
-    public Transformation build(BoneGroup boneGroup) {
-        return new Transformation(boneGroup.origin().div(16).add(this.offset), this.leftRot, this.scale, this.rightRot);
+        this.rotation = rotation != null ? rotation : new Quaternionf();
     }
 
     public Vector3f getOffset() {
@@ -41,12 +33,8 @@ public final class BoneGroupTransform {
         return scale;
     }
 
-    public Quaternionf getLeftRot() {
-        return leftRot;
-    }
-
-    public Quaternionf getRightRot() {
-        return rightRot;
+    public Quaternionf getRotation() {
+        return rotation;
     }
 
     @Override
@@ -56,13 +44,12 @@ public final class BoneGroupTransform {
         var that = (BoneGroupTransform) obj;
         return Objects.equals(this.offset, that.offset) &&
                 Objects.equals(this.scale, that.scale) &&
-                Objects.equals(this.leftRot, that.leftRot) &&
-                Objects.equals(this.rightRot, that.rightRot);
+                Objects.equals(this.rotation, that.rotation);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(offset, scale, leftRot, rightRot);
+        return Objects.hash(offset, scale, rotation);
     }
 
     @Override
@@ -70,8 +57,7 @@ public final class BoneGroupTransform {
         return "BoneGroupTransform[" +
                 "offset=" + offset + ", " +
                 "scale=" + scale + ", " +
-                "leftRot=" + leftRot + ", " +
-                "rightRot=" + rightRot + ']';
+                "leftRot=" + rotation;
     }
 
 }
