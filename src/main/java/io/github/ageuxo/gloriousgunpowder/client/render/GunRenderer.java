@@ -238,9 +238,12 @@ public class GunRenderer extends GeoItemRenderer<GeoFirearm> {
     }
 
     public void renderChildGroups(PoseStack poseStack, GeoFirearm animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, BoneGeoModel<GeoFirearm> boneGeoModel, BoneGroup boneGroup) {
-
-        for (BoneGroup group : boneGroup.getChildGroups()){
-            renderGroupRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha, boneGeoModel, group);
+        List<BoneGroup> groups = boneGroup.getChildGroups();
+        List<GeoBone> bones = bone.getChildBones();
+        for (int i = 0; i < groups.size(); i++){
+            GeoBone subBone = bones.get(i);
+            BoneGroup subGroup = groups.get(i);
+            renderGroupRecursively(poseStack, animatable, subBone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha, boneGeoModel, subGroup);
         }
     }
 

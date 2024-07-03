@@ -42,14 +42,8 @@
 				{
 					"name": "stocks",
 					"parent": "root",
-					"pivot": [0, 0, 5]
-				},
-				{
-					"name": "standard",
-					"parent": "stocks",
-					"pivot": [0, 0, 4],
+					"pivot": [0, 0, 5],
 					"cubes": [
-						{"origin": [-1, -1, 6], "size": [2, 3, 2], "uv": [1, 1]},
 						{"origin": [-1, 0, 3], "size": [2, 2, 3], "uv": [0, 0]}
 					]
 				}

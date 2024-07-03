@@ -2,6 +2,7 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"matchlock.trigger": {
+			"loop": "hold_on_last_frame",
 			"animation_length": 0.625,
 			"bones": {
 				"match": {
@@ -17,6 +18,7 @@
 			}
 		},
 		"matchlock.rearm": {
+			"loop": "hold_on_last_frame",
 			"animation_length": 0.875,
 			"bones": {
 				"match": {
