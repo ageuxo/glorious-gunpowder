@@ -1,5 +1,6 @@
 package io.github.ageuxo.gloriousgunpowder.item;
 
+import io.github.ageuxo.gloriousgunpowder.client.render.GunRenderer;
 import io.github.ageuxo.gloriousgunpowder.client.sound.ModSounds;
 import io.github.ageuxo.gloriousgunpowder.data.GunAttribute;
 import io.github.ageuxo.gloriousgunpowder.data.GunDataComponents;
@@ -191,6 +192,9 @@ public class BaseFirearm extends ProjectileWeaponItem {
     }
     @Override
     public @NotNull UseAnim getUseAnimation(@NotNull ItemStack pStack) {
+        if (GunRenderer.MODEL_DEBUG){
+            return UseAnim.CUSTOM;
+        }
         return UseAnim.SPEAR;
     }
 

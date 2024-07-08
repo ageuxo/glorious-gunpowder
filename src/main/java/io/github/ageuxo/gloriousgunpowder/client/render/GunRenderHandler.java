@@ -33,9 +33,12 @@ public class GunRenderHandler {
             this.recoilProgress = 0;
         }
     }
+
     @SubscribeEvent
     public void onGunFire(GunFiredEvent event) {
-        if(event.getShooter() instanceof AbstractClientPlayer && event.getGun().getItem() instanceof BaseFirearm firearm) {
+        if (GunRenderer.MODEL_DEBUG){
+            this.recoil = 0;
+        } else if (event.getShooter() instanceof AbstractClientPlayer && event.getGun().getItem() instanceof BaseFirearm firearm) {
             this.recoil = firearm.getGunAttributeValue(event.getGun(), GunStats.RECOIL.get());
         }
     }

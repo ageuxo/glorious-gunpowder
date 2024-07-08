@@ -108,7 +108,7 @@ public class GunRenderer extends GeoItemRenderer<GeoFirearm> {
     public void renderGroupsModel(PoseStack poseStack, GeoFirearm animatable, GeoBone bone, RenderType finalRenderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, BoneGeoModel<GeoFirearm> instanceGeoModel, GroupsModel groupsModel) {
         for (BoneGroup boneGroup : groupsModel.getTopLevelGroups()){
             renderGroupRecursively(poseStack, animatable, bone, finalRenderType, bufferSource, buffer, isReRender, partialTick, packedLight,
-                    packedOverlay, red, green, blue, alpha, instanceGeoModel, boneGroup);
+                    packedOverlay, red, green, blue, alpha, instanceGeoModel, boneGroup, true);
         }
     }
 
@@ -163,16 +163,16 @@ public class GunRenderer extends GeoItemRenderer<GeoFirearm> {
         poseStack.popPose();
     }
 
-    public void renderGroupRecursively(PoseStack poseStack, GeoFirearm animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, BoneGeoModel<GeoFirearm> boneGeoModel, BoneGroup boneGroup) {
+    public void renderGroupRecursively(PoseStack poseStack, GeoFirearm animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, BoneGeoModel<GeoFirearm> boneGeoModel, BoneGroup boneGroup, boolean isTopLevel) {
         poseStack.pushPose();
         RenderUtil.prepMatrixForBone(poseStack, bone);
-        renderGroupModel(poseStack, bone, buffer, packedLight, packedOverlay, red, green, blue, alpha, boneGeoModel, boneGroup);
+        renderGroupModel(poseStack, bone, buffer, packedLight, packedOverlay, red, green, blue, alpha, boneGeoModel, boneGroup, isTopLevel, bufferSource);
 
         renderChildGroups(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha, boneGeoModel, boneGroup);
         poseStack.popPose();
     }
 
-    public void renderGroupModel(PoseStack poseStack, GeoBone bone, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, BoneGeoModel<GeoFirearm> boneGeoModel, BoneGroup boneGroup) {
+    public void renderGroupModel(PoseStack poseStack, GeoBone bone, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, BoneGeoModel<GeoFirearm> boneGeoModel, BoneGroup boneGroup, boolean isTopLevel, MultiBufferSource bufferSource) {
         if (bone.isHidden()){
             return;
         }
@@ -185,7 +185,7 @@ public class GunRenderer extends GeoItemRenderer<GeoFirearm> {
             RenderUtil.rotateMatrixAroundBone(poseStack, bone);
             RenderUtil.translateAwayFromPivotPoint(poseStack, bone);
 
-            setupSubModelRender(poseStack, bone);
+            setupSubModelRender(poseStack, bone, isTopLevel, bufferSource, buffer, packedLight, packedOverlay);
 
             GroupModelRenderer.renderSubModel(poseStack, buffer, bakedModel, red, green, blue, alpha, packedLight, packedOverlay, this.random, ModelData.EMPTY, RenderType.cutout());
 
@@ -201,16 +201,16 @@ public class GunRenderer extends GeoItemRenderer<GeoFirearm> {
         return null;
     }
 
-    private void setupSubModelRender(PoseStack poseStack, GeoBone bone){
+    private void setupSubModelRender(PoseStack poseStack, GeoBone bone, boolean topLevel, MultiBufferSource bufferSource, VertexConsumer buffer, int packedLight, int packOverlay){
         GeoCube cube = getCube(bone);
 
         Vector3f offset = getBoneOffset(bone);
-        poseStack.translate(offset.x(), offset.y(), offset.z());
+        if (topLevel){
+            poseStack.translate(offset.x(), offset.y(), offset.z());
+        }
 
         if (cube != null) {
-            RenderUtil.translateToPivotPoint(poseStack, cube);
-            RenderUtil.rotateMatrixAroundCube(poseStack, cube);
-            RenderUtil.translateAwayFromPivotPoint(poseStack, cube);
+            GroupModelRenderer.rotateAroundPivot(poseStack, cube, offset);
         }
     }
 
@@ -243,7 +243,7 @@ public class GunRenderer extends GeoItemRenderer<GeoFirearm> {
         for (int i = 0; i < groups.size(); i++){
             GeoBone subBone = bones.get(i);
             BoneGroup subGroup = groups.get(i);
-            renderGroupRecursively(poseStack, animatable, subBone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha, boneGeoModel, subGroup);
+            renderGroupRecursively(poseStack, animatable, subBone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha, boneGeoModel, subGroup, false);
         }
     }
 
