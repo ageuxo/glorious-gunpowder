@@ -57,7 +57,7 @@ public final class BoneGroupTransform {
         return "BoneGroupTransform[" +
                 "offset=" + offset + ", " +
                 "scale=" + scale + ", " +
-                "leftRot=" + rotation;
+                "rotation=" + rotation;
     }
 
 }
