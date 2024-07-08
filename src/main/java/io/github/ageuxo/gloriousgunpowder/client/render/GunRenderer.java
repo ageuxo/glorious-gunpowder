@@ -14,6 +14,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.debug.DebugRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
@@ -42,6 +43,7 @@ import java.util.Map;
 
 @ParametersAreNonnullByDefault
 public class GunRenderer extends GeoItemRenderer<GeoFirearm> {
+    public static final boolean MODEL_DEBUG = false;
     private static final Long2ObjectOpenHashMap<BoneGeoModel<GeoFirearm>> INSTANCE_2_MODEL_MAP = new Long2ObjectOpenHashMap<>();
     private static final Map<GeoBone, Vector3f> BONE_OFFSETS = new HashMap<>();
     private final RandomSource random = RandomSource.create();
@@ -211,6 +213,15 @@ public class GunRenderer extends GeoItemRenderer<GeoFirearm> {
 
         if (cube != null) {
             GroupModelRenderer.rotateAroundPivot(poseStack, cube, offset);
+            if (MODEL_DEBUG){
+                poseStack.pushPose();
+                Vector3f pivot = new Vector3f(cube.pivot().toVector3f()).div(16);
+                Vector3f offsetPivot = new Vector3f(pivot).add(offset);
+                DebugRenderer.renderFilledBox(poseStack, bufferSource, offsetPivot.x - 0.01, offsetPivot.z - 0.01, offsetPivot.y - 0.01,offsetPivot.x + 0.01, offsetPivot.z + 0.01, offsetPivot.y + 0.01, 1, 0, 0, 1f);
+                DebugRenderer.renderFilledBox(poseStack, bufferSource, pivot.x - 0.02, pivot.z - 0.02, pivot.y - 0.02,pivot.x + 0.02, pivot.z + 0.02, pivot.y + 0.02, 0, 0, 1, 0.5f);
+                poseStack.popPose();
+                bufferSource.getBuffer(RenderType.cutout()); // Global state
+            }
         }
     }
 
