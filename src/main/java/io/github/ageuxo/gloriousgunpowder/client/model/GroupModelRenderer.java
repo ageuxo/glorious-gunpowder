@@ -16,7 +16,7 @@ public class GroupModelRenderer {
     public GroupModelRenderer() {
     }
 
-    public static void renderSubModel(PoseStack poseStack, VertexConsumer consumer, BakedModel model, float red, float green, float blue, float alpha, int packedLight, int packedOverlay, RandomSource random, ModelData modelData, @Nullable RenderType renderType){
+    public static void renderModel(PoseStack poseStack, VertexConsumer consumer, BakedModel model, float red, float green, float blue, float alpha, int packedLight, int packedOverlay, RandomSource random, ModelData modelData, @Nullable RenderType renderType){
 
         PoseStack.Pose pose = poseStack.last();
 

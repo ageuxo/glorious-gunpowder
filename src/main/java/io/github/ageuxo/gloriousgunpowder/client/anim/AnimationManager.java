@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
@@ -22,6 +23,8 @@ import java.util.Map;
 public class AnimationManager extends SimpleJsonResourceReloadListener {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+
+    public static final Codec<Map<String, GroupAnimationData>> ENTRY_CODEC = Codec.unboundedMap(Codec.STRING, GroupAnimationData.CODEC);
 
     public static AnimationManager INSTANCE = new AnimationManager(GSON);
 
@@ -42,7 +45,7 @@ public class AnimationManager extends SimpleJsonResourceReloadListener {
             ResourceLocation key = entry.getKey();
 
             try {
-                AnimationData decoded = AnimationData.CODEC.parse(JsonOps.INSTANCE, entry.getValue()).getOrThrow(JsonParseException::new);
+                Map<String, GroupAnimationData> decoded = ENTRY_CODEC.parse(JsonOps.INSTANCE, entry.getValue()).getOrThrow(JsonParseException::new);
                 builder.put(key, new Animation(key, decoded));
             } catch (JsonParseException e) {
                 LOGGER.error("Parsing error loading animation {}", key, e);

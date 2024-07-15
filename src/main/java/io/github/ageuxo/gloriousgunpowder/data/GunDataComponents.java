@@ -1,6 +1,7 @@
 package io.github.ageuxo.gloriousgunpowder.data;
 
 
+import com.mojang.serialization.Codec;
 import io.github.ageuxo.gloriousgunpowder.GloriousGunpowderMod;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
@@ -21,6 +22,8 @@ public class GunDataComponents {
             COMPONENTS.register("gun_components", () -> DataComponentType.<List<GunComponents>>builder().persistent(GunComponents.LIST_CODEC).networkSynchronized(GunComponents.STREAM_CODEC.apply(ByteBufCodecs.list())).build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Map<String, ResourceLocation>>> MODEL_LOOKUP =
             COMPONENTS.register("model_lookup", () -> DataComponentType.<Map<String, ResourceLocation>>builder().persistent(ModelLookup.CODEC).networkSynchronized(ModelLookup.STREAM_CODEC).build());
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Long>> ANIM_INSTANCE_ID =
+            COMPONENTS.register("anim_instance_id", () -> DataComponentType.<Long>builder().persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG).build());
 
     public static void register(IEventBus bus) {
         COMPONENTS.register(bus);

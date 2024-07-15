@@ -1,14 +1,18 @@
 package io.github.ageuxo.gloriousgunpowder.client.anim;
 
+import io.github.ageuxo.gloriousgunpowder.GloriousGunpowderMod;
+import io.github.ageuxo.gloriousgunpowder.client.model.BoneGroup;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.Map;
 import java.util.Objects;
 
 public final class Animation {
+    public static final Animation EMPTY = new Animation(GloriousGunpowderMod.rl("empty"), Map.of());
     private final ResourceLocation id;
-    private final AnimationData data;
+    private final Map<String, GroupAnimationData> data;
 
-    public Animation(ResourceLocation id, AnimationData data) {
+    public Animation(ResourceLocation id, Map<String, GroupAnimationData> data) {
         this.id = id;
         this.data = data;
     }
@@ -17,8 +21,12 @@ public final class Animation {
         return id;
     }
 
-    public AnimationData data() {
+    public Map<String, GroupAnimationData> data() {
         return data;
+    }
+
+    public GroupAnimationData getGroupData(BoneGroup group){
+        return data.get(group.name());
     }
 
     @Override

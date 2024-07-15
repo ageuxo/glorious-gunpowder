@@ -187,7 +187,7 @@ public class GunRenderer extends GeoItemRenderer<GeoFirearm> {
 
             setupSubModelRender(poseStack, bone);
 
-            GroupModelRenderer.renderSubModel(poseStack, buffer, bakedModel, red, green, blue, alpha, packedLight, packedOverlay, this.random, ModelData.EMPTY, RenderType.cutout());
+            GroupModelRenderer.renderModel(poseStack, buffer, bakedModel, red, green, blue, alpha, packedLight, packedOverlay, this.random, ModelData.EMPTY, RenderType.cutout());
 
             poseStack.popPose();
         }
@@ -260,7 +260,7 @@ public class GunRenderer extends GeoItemRenderer<GeoFirearm> {
         Vector3f offset = getBoneOffset(bone);
         poseStack.translate(offset.x(), offset.y(), offset.z());
 
-        GroupModelRenderer.renderSubModel(poseStack, buffer, model, red, green, blue, alpha, packedLight, packedOverlay, random, ModelData.EMPTY, RenderType.cutout());
+        GroupModelRenderer.renderModel(poseStack, buffer, model, red, green, blue, alpha, packedLight, packedOverlay, random, ModelData.EMPTY, RenderType.cutout());
         poseStack.popPose();
     }
 

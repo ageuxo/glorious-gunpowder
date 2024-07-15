@@ -21,7 +21,30 @@ public final class BoneGroupTransform {
         this.rotation = rotation != null ? rotation : new Quaternionf();
     }
 
-    public Vector3f getOffset() {
+    //TODO anim timer using gametime + partialTick
+
+
+    public BoneGroupTransform setLerped(KeyTransform from, KeyTransform to, float t){
+
+        from.position().lerp(to.position(), t, this.offset);
+        from.scale().lerp(to.scale(), t, this.scale);
+        from.rotation().slerp(to.rotation(), t, this.rotation);
+
+        return this;
+    }
+
+    public BoneGroupTransform setFromKeyTransform(KeyTransform keyTransform){
+        return set(keyTransform.position(), keyTransform.scale(), keyTransform.rotation());
+    }
+
+    public BoneGroupTransform set(Vector3f newOffset, Vector3f newScale, Quaternionf newRotation){
+        this.offset.set(newOffset);
+        this.scale.set(newScale);
+        this.rotation.set(newRotation);
+        return this;
+    }
+
+    public Vector3f offset() {
         return offset;
     }
 
@@ -29,11 +52,11 @@ public final class BoneGroupTransform {
         this.offset.add(vec);
     }
 
-    public Vector3f getScale() {
+    public Vector3f scale() {
         return scale;
     }
 
-    public Quaternionf getRotation() {
+    public Quaternionf rotation() {
         return rotation;
     }
 
