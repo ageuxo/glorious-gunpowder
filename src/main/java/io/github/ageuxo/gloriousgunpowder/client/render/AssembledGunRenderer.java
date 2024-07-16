@@ -33,6 +33,7 @@ import java.util.Map;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class AssembledGunRenderer extends BlockEntityWithoutLevelRenderer {
+    public static final AssembledGunRenderer INSTANCE = new AssembledGunRenderer();
     private static final Long2ObjectMap<AnimatableInstance> ID_INSTANCE_MAP = new Long2ObjectOpenHashMap<>();
     private static final List<Pair<String, Vector3f>> ANCHORS = List.of(
             Pair.of("lockworks", new Vector3f()),
@@ -43,7 +44,7 @@ public class AssembledGunRenderer extends BlockEntityWithoutLevelRenderer {
     public final BoneGroupTransform transform = new BoneGroupTransform();
     protected ItemStack stack;
 
-    public AssembledGunRenderer() {
+    private AssembledGunRenderer() {
         super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
     }
 
