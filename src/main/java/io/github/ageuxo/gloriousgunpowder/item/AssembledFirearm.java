@@ -26,6 +26,7 @@ public class AssembledFirearm extends BaseFirearm{
                                 new GunComponents(MaterialProvider.IRON.location(), PartShapeProvider.UNRIFLED_BARREL.location())
                         )
                 )
+                .component(GunDataComponents.MODEL_LOOKUP, GeoFirearm.createTestModelLookup())
                 .component(GunDataComponents.ANIM_INSTANCE_ID, 0L) //TODO set this via AnimatableTracker when assembling
         );
     }

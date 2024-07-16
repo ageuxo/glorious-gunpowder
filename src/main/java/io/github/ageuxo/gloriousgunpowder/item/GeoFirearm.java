@@ -36,7 +36,7 @@ public class GeoFirearm extends BaseFirearm implements GeoItem {
     private static final RawAnimation REARM_ANIM = RawAnimation.begin().thenPlay("lockworks.rearm");
 
     @NotNull
-    private static HashMap<String, ResourceLocation> createTestModelLookup() {
+    public static HashMap<String, ResourceLocation> createTestModelLookup() {
         HashMap<String, ResourceLocation> map = new HashMap<>();
         map.put("root", GloriousGunpowderMod.rl("root"));
         map.put(PartShapeTagProvider.STOCKS.location().getPath(), PartShapeProvider.STANDARD_STOCK.location());

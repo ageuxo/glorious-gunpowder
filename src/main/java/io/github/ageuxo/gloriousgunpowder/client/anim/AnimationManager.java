@@ -46,6 +46,9 @@ public class AnimationManager extends SimpleJsonResourceReloadListener {
 
             try {
                 Map<String, GroupAnimationData> decoded = ENTRY_CODEC.parse(JsonOps.INSTANCE, entry.getValue()).getOrThrow(JsonParseException::new);
+                if (decoded.isEmpty()){
+                    throw new JsonParseException("No entries defined");
+                }
                 builder.put(key, new Animation(key, decoded));
             } catch (JsonParseException e) {
                 LOGGER.error("Parsing error loading animation {}", key, e);
