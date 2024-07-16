@@ -40,13 +40,15 @@ public class AnimatableInstance {
     public BoneGroupTransform setGroupTransformForTick(BoneGroupTransform groupTransform, BoneGroup group, long gameTime, float partialTick){
         int tick = (int) (gameTime - startTick);
         GroupAnimationData anim = currentAnimation().getGroupData(group);
-        KeyTransform transform = anim.get(tick);
-        KeyTransform nextTransform = anim.getNext(tick);
-        if (transform.equals(nextTransform)){
-            return groupTransform.setFromKeyTransform(transform);
+        if (anim != null){
+            KeyTransform transform = anim.get(tick);
+            KeyTransform nextTransform = anim.getNext(tick);
+            if (transform.equals(nextTransform)) {
+                return groupTransform.setFromKeyTransform(transform);
+            }
+            return groupTransform.setLerped(transform, nextTransform, partialTick);
         }
-        return groupTransform.setLerped(transform, nextTransform, partialTick);
-
+        return groupTransform.setFromKeyTransform(KeyTransform.EMPTY);
     }
 
     public Animation currentAnimation(){

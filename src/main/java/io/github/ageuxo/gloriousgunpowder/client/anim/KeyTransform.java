@@ -12,4 +12,6 @@ public record KeyTransform(Vector3f position, Vector3f scale, Quaternionf rotati
             ExtraCodecs.VECTOR3F.fieldOf("scale").forGetter(KeyTransform::scale),
             ExtraCodecs.QUATERNIONF.fieldOf("rotation").forGetter(KeyTransform::rotation)
     ).apply(instance, KeyTransform::new));
+
+    public static final KeyTransform EMPTY = new KeyTransform(new Vector3f(), new Vector3f(1), new Quaternionf());
 }
