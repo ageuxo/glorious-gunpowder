@@ -36,9 +36,9 @@ public class AssembledGunRenderer extends BlockEntityWithoutLevelRenderer {
     public static final AssembledGunRenderer INSTANCE = new AssembledGunRenderer();
     private static final Long2ObjectMap<AnimatableInstance> ID_INSTANCE_MAP = new Long2ObjectOpenHashMap<>();
     private static final List<Pair<String, Vector3f>> ANCHORS = List.of(
-            Pair.of("lockworks", new Vector3f()),
-            Pair.of("barrels", new Vector3f()),
-            Pair.of("stocks", new Vector3f())
+            Pair.of("lockworks", new Vector3f(8f/16f, 8f/16f, 6f/16f)),
+            Pair.of("barrels", new Vector3f(8f/16f, 8f/16f, -6f/16f)),
+            Pair.of("stocks", new Vector3f(8f/16f, 8f/16f, 12f/16f))
     );
 
     public final BoneGroupTransform transform = new BoneGroupTransform();
