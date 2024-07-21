@@ -41,14 +41,10 @@ public class AnimatableInstance {
         int tick = (int) (gameTime - startTick);
         GroupAnimationData anim = currentAnimation().getGroupData(group);
         if (anim != null){
-            KeyTransform transform = anim.get(tick);
-            KeyTransform nextTransform = anim.getNext(tick);
-            if (transform.equals(nextTransform)) {
-                return groupTransform.setFromKeyTransform(transform);
-            }
-            return groupTransform.setLerped(transform, nextTransform, partialTick);
+            return groupTransform.setLerped(anim, tick, partialTick);
         }
-        return groupTransform.setFromKeyTransform(KeyTransform.EMPTY);
+        KeyTransform key = KeyTransform.EMPTY;
+        return groupTransform.set(key.position(), key.scale(), key.rotation());
     }
 
     public Animation currentAnimation(){

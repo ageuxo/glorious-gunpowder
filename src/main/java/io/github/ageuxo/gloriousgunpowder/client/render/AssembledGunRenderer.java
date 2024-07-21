@@ -118,7 +118,7 @@ public class AssembledGunRenderer extends BlockEntityWithoutLevelRenderer {
     public void setupPoseForGroup(PoseStack poseStack, AnimatableInstance instance, BoneGroup group, float partialTick){
         BoneGroupTransform transforms = instance.setGroupTransformForTick(this.transform, group, getGameTime(), partialTick);
 
-        RenderHelpers.translatePosestack(poseStack, transforms.offset());
+        RenderHelpers.translatePosestack(poseStack, transforms.translation());
         RenderHelpers.translateToPivot(poseStack, group);
         RenderHelpers.rotateAroundPivot(poseStack, transforms.rotation());
         RenderHelpers.scalePosestack(poseStack, transforms.scale());

@@ -7,7 +7,7 @@ import org.joml.Vector3f;
 import java.util.Objects;
 
 public final class BoneGroupTransform {
-    private final Vector3f offset;
+    private final Vector3f translation;
     private final Vector3f scale;
     private final Quaternionf rotation;
 
@@ -15,8 +15,8 @@ public final class BoneGroupTransform {
         this(null, null, null);
     }
 
-    public BoneGroupTransform(@Nullable Vector3f offset, @Nullable Vector3f scale, @Nullable Quaternionf rotation) {
-        this.offset = offset != null ? offset : new Vector3f();
+    public BoneGroupTransform(@Nullable Vector3f translation, @Nullable Vector3f scale, @Nullable Quaternionf rotation) {
+        this.translation = translation != null ? translation : new Vector3f();
         this.scale = scale != null ? scale : new Vector3f(1);
         this.rotation = rotation != null ? rotation : new Quaternionf();
     }
@@ -24,32 +24,27 @@ public final class BoneGroupTransform {
     //TODO anim timer using gametime + partialTick
 
 
-    public BoneGroupTransform setLerped(KeyTransform from, KeyTransform to, float t){
+    public BoneGroupTransform setLerped(GroupAnimationData anim, int tick, float t){
+        return setLerped(anim.getTranslation(tick), anim.getScale(tick), anim.getRotation(tick), anim.getNextTranslation(tick), anim.getNextScale(tick), anim.getNextRotation(tick), t);
+    }
 
-        from.position().lerp(to.position(), t, this.offset);
-        from.scale().lerp(to.scale(), t, this.scale);
-        from.rotation().slerp(to.rotation(), t, this.rotation);
+    public BoneGroupTransform setLerped(Vector3f fromTranslation, Vector3f fromScale, Quaternionf fromRotation, Vector3f toTranslation, Vector3f toScale, Quaternionf toRotation, float t){
+        fromTranslation.lerp(toTranslation, t, this.translation);
+        fromScale.lerp(toScale, t, this.scale);
+        fromRotation.slerp(toRotation, t, this.rotation);
 
         return this;
     }
 
-    public BoneGroupTransform setFromKeyTransform(KeyTransform keyTransform){
-        return set(keyTransform.position(), keyTransform.scale(), keyTransform.rotation());
-    }
-
     public BoneGroupTransform set(Vector3f newOffset, Vector3f newScale, Quaternionf newRotation){
-        this.offset.set(newOffset);
+        this.translation.set(newOffset);
         this.scale.set(newScale);
         this.rotation.set(newRotation);
         return this;
     }
 
-    public Vector3f offset() {
-        return offset;
-    }
-
-    public void addOffset(Vector3f vec){
-        this.offset.add(vec);
+    public Vector3f translation() {
+        return translation;
     }
 
     public Vector3f scale() {
@@ -65,20 +60,20 @@ public final class BoneGroupTransform {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (BoneGroupTransform) obj;
-        return Objects.equals(this.offset, that.offset) &&
+        return Objects.equals(this.translation, that.translation) &&
                 Objects.equals(this.scale, that.scale) &&
                 Objects.equals(this.rotation, that.rotation);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(offset, scale, rotation);
+        return Objects.hash(translation, scale, rotation);
     }
 
     @Override
     public String toString() {
         return "BoneGroupTransform[" +
-                "offset=" + offset + ", " +
+                "offset=" + translation + ", " +
                 "scale=" + scale + ", " +
                 "rotation=" + rotation;
     }
