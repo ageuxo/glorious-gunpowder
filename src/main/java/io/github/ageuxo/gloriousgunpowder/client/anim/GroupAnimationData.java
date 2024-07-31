@@ -1,6 +1,7 @@
 package io.github.ageuxo.gloriousgunpowder.client.anim;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
@@ -11,7 +12,16 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class GroupAnimationData {
-    public static final Codec<Integer> KEY_CODEC = Codec.FLOAT.xmap(f -> (int) f.floatValue() * 20, i -> i / 20f);
+    public static final Codec<Float> FLOAT_STRING_KEY = Codec.STRING.comapFlatMap( //this has to be in this class, not Animation?
+            s -> {
+                try {
+                    return DataResult.success(Float.valueOf(s));
+                } catch (NumberFormatException e) {
+                    return DataResult.error(()->s + " is not a float");
+                }
+            },
+            aFloat -> Float.toString(aFloat));
+    public static final Codec<Integer> KEY_CODEC = FLOAT_STRING_KEY.xmap(f -> (int) f.floatValue() * 20, i -> i / 20f);
     public static final Codec<TreeMap<Integer, Vector3f>> VEC3_ENTRY_CODEC = Codec.unboundedMap(KEY_CODEC, ExtraCodecs.VECTOR3F).xmap(TreeMap::new, Map::copyOf);
     public static final Codec<TreeMap<Integer, Quaternionf>> QUAT_ENTRY_CODEC = Codec.unboundedMap(KEY_CODEC, ExtraCodecs.VECTOR3F.xmap(vec -> new Quaternionf(vec.x(), vec.y(), vec.z(), 0), quat -> new Vector3f(quat.x(), quat.y(), quat.z()))).xmap(TreeMap::new, Map::copyOf);
     public static final Codec<GroupAnimationData> CODEC = RecordCodecBuilder.create(instance->instance.group(

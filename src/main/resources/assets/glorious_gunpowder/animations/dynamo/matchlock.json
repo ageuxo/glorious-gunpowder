@@ -1,0 +1,17 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"trigger": {
+			"animation_length": 0.5,
+			"bones": {
+				"match": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.125": [45, 0, 0],
+						"0.2083": [67.5, 0, 0]
+					}
+				}
+			}
+		}
+	}
+}

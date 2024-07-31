@@ -1,52 +1,37 @@
 package io.github.ageuxo.gloriousgunpowder.client.anim;
 
-import io.github.ageuxo.gloriousgunpowder.GloriousGunpowderMod;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.ageuxo.gloriousgunpowder.client.model.BoneGroup;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.Map;
-import java.util.Objects;
 
-public final class Animation {
-    public static final Animation EMPTY = new Animation(GloriousGunpowderMod.rl("empty"), Map.of());
-    private final ResourceLocation id;
-    private final Map<String, GroupAnimationData> data;
+public record Animation(String name, int length, Map<String, GroupAnimationData> data) {
+    public static final Codec<Float> FLOAT_STRING_KEY = Codec.STRING.comapFlatMap(
+            s -> {
+                try {
+                    return DataResult.success(Float.valueOf(s));
+                } catch (NumberFormatException e) {
+                    return DataResult.error(()->s + " is not a float");
+                }
+            },
+            aFloat -> Float.toString(aFloat));
+    public static final Codec<Map<String, GroupAnimationData>> DATA_CODEC = Codec.unboundedMap(Codec.STRING, GroupAnimationData.CODEC);
+    public static final Codec<Integer> INTEGER_CODEC = FLOAT_STRING_KEY.xmap(f -> Math.round(f * 20), i ->(float) i / 20f);
+    public static final Codec<Animation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.STRING.fieldOf("name").forGetter(Animation::name),
+            INTEGER_CODEC.fieldOf("animation_length").forGetter(Animation::length),
+            DATA_CODEC.fieldOf("bones").forGetter(Animation::data)
+    ).apply(instance, Animation::new));
+    public static final Animation EMPTY = new Animation("empty",0, Map.of());
 
-    public Animation(ResourceLocation id, Map<String, GroupAnimationData> data) {
-        this.id = id;
-        this.data = data;
+    public Animation(String name, float length, Map<String, GroupAnimationData> data) {
+        this(name, (int)(length*20), data);
     }
 
-    public ResourceLocation id() {
-        return id;
-    }
-
-    public Map<String, GroupAnimationData> data() {
-        return data;
-    }
-
-    public GroupAnimationData getGroupData(BoneGroup group){
+    public GroupAnimationData getGroupData(BoneGroup group) {
         return data.get(group.name());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj instanceof Animation anim) {
-            return anim.id().equals(this.id());
-        }
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Animation[" +
-                "id=" + id + ']';
     }
 
 }

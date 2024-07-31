@@ -1,5 +1,6 @@
 package io.github.ageuxo.gloriousgunpowder.client;
 
+import io.github.ageuxo.gloriousgunpowder.client.anim.AnimationManager;
 import io.github.ageuxo.gloriousgunpowder.client.model.GroupGeometryLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.FileToIdConverter;
@@ -7,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 
 import java.util.Map;
 
@@ -28,5 +30,10 @@ public class ClientModBusEvents {
     @SubscribeEvent
     public static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event){
         event.register(GroupGeometryLoader.ID, GroupGeometryLoader.INSTANCE);
+    }
+
+    @SubscribeEvent
+    public static void registerReloadListener(RegisterClientReloadListenersEvent event){
+        event.registerReloadListener(AnimationManager.INSTANCE);
     }
 }

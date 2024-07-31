@@ -2,6 +2,7 @@ package io.github.ageuxo.gloriousgunpowder.client.anim;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
+import io.github.ageuxo.gloriousgunpowder.GloriousGunpowderMod;
 import io.github.ageuxo.gloriousgunpowder.client.model.BoneGroup;
 import io.github.ageuxo.gloriousgunpowder.client.model.GroupsModel;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -57,6 +58,10 @@ public class AnimatableInstance {
             this.currentAnimation = next;
             this.startTick = gameTime;
         }
+    }
+
+    public void addAnimToQueue(Animation animation){
+        AnimationManager.INSTANCE.get(GloriousGunpowderMod.rl("matchlock"));
     }
 
     @Nullable
