@@ -1,10 +1,12 @@
 package io.github.ageuxo.gloriousgunpowder.client.anim;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.UnboundedMapCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -43,14 +45,14 @@ public class AnimationManager extends SimpleJsonResourceReloadListener {
     protected void apply(Map<ResourceLocation, JsonElement> jsonMap, ResourceManager pResourceManager, ProfilerFiller pProfiler) {
         { //temp testing encode of codecs
             Map<String, GroupAnimationData> testMap = new HashMap<>();
-            TreeMap<Integer, Vector3f> translationMap = new TreeMap<>();
-            translationMap.put(2, new Vector3f(3));
-            translationMap.put(3, new Vector3f(3));
-            TreeMap<Integer, Vector3f> scaleMap = new TreeMap<>();
-            scaleMap.put(19, new Vector3f(5));
+            TreeMap<Float, Vector3f> translationMap = new TreeMap<>();
+            translationMap.put(2f, new Vector3f(3));
+            translationMap.put(3f, new Vector3f(3));
+            TreeMap<Float, Vector3f> scaleMap = new TreeMap<>();
+            scaleMap.put(19f, new Vector3f(5));
 
-            TreeMap<Integer, Quaternionf> rotationMap = new TreeMap<>();
-            rotationMap.put(1, new Quaternionf(1, 2, 3, 4));
+            TreeMap<Float, Quaternionf> rotationMap = new TreeMap<>();
+            rotationMap.put(1f, new Quaternionf(1, 2, 3, 4));
             testMap.put("test1", new GroupAnimationData(translationMap, scaleMap, rotationMap));
             try {
                 UnboundedMapCodec<String, GroupAnimationData> mapCodec = Codec.unboundedMap(Codec.STRING, GroupAnimationData.CODEC);
@@ -64,24 +66,21 @@ public class AnimationManager extends SimpleJsonResourceReloadListener {
 
         ImmutableMap.Builder<ResourceLocation, AnimationHolder> builder = ImmutableMap.builder();
         for (var entry : jsonMap.entrySet()){
-            ResourceLocation key = entry.getKey();
-            try {
-                JsonObject holderJson = entry.getValue().getAsJsonObject();
-                ImmutableMap.Builder<String, Animation> holderMap = new ImmutableMap.Builder<>();
-                for (var anim : holderJson.getAsJsonObject("animations").entrySet()){
-                    try {
-                        JsonObject value = anim.getValue().getAsJsonObject();
-                        DataResult<Map<String, GroupAnimationData>> parsed = Animation.DATA_CODEC.parse(JsonOps.INSTANCE, value.get("bones"));
-                        Map<String, GroupAnimationData> bones = parsed.getOrThrow(JsonParseException::new);
-                        holderMap.put(anim.getKey(), new Animation(anim.getKey(), value.get("animation_length").getAsFloat(), bones));
-                    } catch (Exception e) {
-                        LOGGER.warn("Skipping invalid animation in {}", key, e);
-                    }
+            ResourceLocation holderKey = entry.getKey();
+            ImmutableMap.Builder<String, Animation> mapBuilder = ImmutableMap.builder();
+            for (var anim : entry.getValue().getAsJsonObject().getAsJsonObject("animations").entrySet()){
+                String name = anim.getKey();
+                try {
+                    var result = Animation.CODEC.parse(JsonOps.INSTANCE, anim.getValue());
+                    var decoded = result.getOrThrow();
+                    mapBuilder.put(name, decoded);
+                } catch (JsonParseException e) {
+                    LOGGER.error("Failed loading animation {}", name, e);
                 }
-                builder.put(key, new AnimationHolder(key, holderMap.build()));
-            } catch (JsonParseException e) {
-                LOGGER.error("Failed parsing animation file {}", key, e);
             }
+            ImmutableMap<String, Animation> animMap = mapBuilder.build();
+            AnimationHolder holder = new AnimationHolder(holderKey, animMap);
+            builder.put(holderKey, holder);
         }
         this.cache = builder.build();
         LOGGER.info("Loaded {} animations", this.cache.size());
