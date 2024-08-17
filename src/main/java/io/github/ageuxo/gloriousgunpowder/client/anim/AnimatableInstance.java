@@ -38,9 +38,24 @@ public class AnimatableInstance {
         return this.id;
     }
 
+    /**
+     * Main getter for Animation
+     * @param gameTime The logical tick of this instance
+     * @return Animation that should be playing
+     */
+    public Animation currentOrNextAnimation(long gameTime){
+        int tick = getTick(gameTime);
+        float length = this.currentAnimation.length();
+        if ((length <= 0) || (length < (tick / 20f))) {
+            this.startTick = gameTime;
+            this.currentAnimation = nextOrEmpty();
+        }
+        return this.currentAnimation;
+    }
+
     public BoneGroupTransform setGroupTransformForTick(BoneGroupTransform groupTransform, BoneGroup group, long gameTime, float partialTick){
-        int tick = startTick >= 0 ? (int) (gameTime - startTick) : 0;
-        GroupAnimationData anim = currentAnimation().getGroupData(group);
+        int tick = getTick(gameTime);
+        GroupAnimationData anim = currentOrNextAnimation(tick).getGroupData(group);
         if (anim != null){
             return groupTransform.setLerped(anim, tick, partialTick);
         }
@@ -48,16 +63,13 @@ public class AnimatableInstance {
         return groupTransform.set(key.position(), key.scale(), key.rotation());
     }
 
-    public Animation currentAnimation(){
-        return this.currentAnimation;
+    private int getTick(long gameTime) {
+        return startTick >= 0 ? (int) (gameTime - startTick) : 0;
     }
 
-    public void nextAnimation(long gameTime){
-        Animation next = queue.poll();
-        if (next != null){
-            this.currentAnimation = next;
-            this.startTick = gameTime;
-        }
+    private Animation nextOrEmpty(){
+        Animation polled = this.queue.poll();
+        return polled != null ? polled : Animation.EMPTY;
     }
 
     public void addAnimToQueue(Animation animation){
