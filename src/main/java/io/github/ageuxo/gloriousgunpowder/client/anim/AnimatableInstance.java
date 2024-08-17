@@ -28,7 +28,7 @@ public class AnimatableInstance {
     private final long id;
 
     private Animation currentAnimation = Animation.EMPTY;
-    private long startTick;
+    private long startTick = -1;
 
     public AnimatableInstance(long id) {
         this.id = id;
@@ -39,7 +39,7 @@ public class AnimatableInstance {
     }
 
     public BoneGroupTransform setGroupTransformForTick(BoneGroupTransform groupTransform, BoneGroup group, long gameTime, float partialTick){
-        int tick = (int) (gameTime - startTick);
+        int tick = startTick >= 0 ? (int) (gameTime - startTick) : 0;
         GroupAnimationData anim = currentAnimation().getGroupData(group);
         if (anim != null){
             return groupTransform.setLerped(anim, tick, partialTick);
