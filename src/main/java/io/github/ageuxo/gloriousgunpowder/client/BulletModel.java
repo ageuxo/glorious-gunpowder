@@ -1,27 +1,28 @@
 package io.github.ageuxo.gloriousgunpowder.client;
 
-import net.minecraft.client.model.HierarchicalModel;
+import io.github.ageuxo.gloriousgunpowder.client.render.BulletRenderState;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
-public class BulletModel <T extends Entity> extends HierarchicalModel<T> {
-    private static final String MAIN = "main";
-    private final ModelPart root;
+public class BulletModel <T extends BulletRenderState> extends EntityModel<T> {
+    public static final String MAIN = "main";
+    protected final ModelPart main = this.root.getChild(MAIN);
 
-    public BulletModel(ModelPart pRoot) {
-        this.root = pRoot;
+    public BulletModel(ModelPart root) {
+        super(root);
     }
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
         partdefinition.addOrReplaceChild(
-                "main",
+                MAIN,
                 CubeListBuilder.create()
                         .texOffs(0, 0)
                         .addBox(0.0F, 0.0F, 0.0F, 2.0F, 2.0F, 2.0F)
@@ -32,12 +33,13 @@ public class BulletModel <T extends Entity> extends HierarchicalModel<T> {
     }
 
     @Override
-    public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+    public void setupAnim(@NotNull T renderState) {
+        super.setupAnim(renderState);
+        main.xScale = 0.5f;
+        main.yScale = 0.5f;
+        main.zScale = 0.5f;
 
-    }
-
-    @Override
-    public ModelPart root() {
-        return this.root;
+        main.xRot = renderState.xRot;
+        main.yRot = renderState.yRot;
     }
 }

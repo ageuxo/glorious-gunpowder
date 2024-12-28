@@ -17,7 +17,7 @@ public class GunRenderHandler {
         if(this.recoil <= 0 || mc.player == null)
             return;
 
-        float recoilAmount = this.recoil * mc.getDeltaFrameTime() * 5f;
+        float recoilAmount = this.recoil * mc.getDeltaTracker().getRealtimeDeltaTicks() * 5f;
         float startProgress = this.recoilProgress / this.recoil;
         float endProgress = (this.recoilProgress + recoilAmount) / this.recoil;
 
