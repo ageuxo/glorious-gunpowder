@@ -12,9 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.TheEndGatewayBlockEntity;
+import net.minecraft.world.level.block.Portal;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -55,32 +53,26 @@ public class BulletProjectile extends Projectile {
     public BulletProjectile(EntityType<? extends BulletProjectile> bulletProjectileEntityType, Level level) {
         super(bulletProjectileEntityType, level);
     }
+
     @Override
     public void tick() {
         super.tick();
         HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
-        boolean flag = false;
+        boolean inPortal = false;
         if (hitresult.getType() == HitResult.Type.BLOCK) {
             BlockPos blockpos = ((BlockHitResult)hitresult).getBlockPos();
             BlockState blockstate = this.level().getBlockState(blockpos);
-            if (blockstate.is(Blocks.NETHER_PORTAL)) {
-                this.handleInsidePortal(blockpos);
-                flag = true;
-            } else if (blockstate.is(Blocks.END_GATEWAY)) {
-                BlockEntity blockentity = this.level().getBlockEntity(blockpos);
-                if (blockentity instanceof TheEndGatewayBlockEntity && TheEndGatewayBlockEntity.canEntityTeleport(this)) {
-                    TheEndGatewayBlockEntity.teleportEntity(this.level(), blockpos, blockstate, this, (TheEndGatewayBlockEntity)blockentity);
-                }
-
-                flag = true;
+            if (blockstate.getBlock() instanceof Portal portal) {
+                this.setAsInsidePortal(portal, blockpos);
+                inPortal = true;
             }
         }
 
-        if (hitresult.getType() != HitResult.Type.MISS && !flag && !net.neoforged.neoforge.event.EventHooks.onProjectileImpact(this, hitresult)) {
+        if (hitresult.getType() != HitResult.Type.MISS && !inPortal && !net.neoforged.neoforge.event.EventHooks.onProjectileImpact(this, hitresult)) {
             this.hitTargetOrDeflectSelf(hitresult);
         }
 
-        this.checkInsideBlocks();
+        this.applyEffectsFromBlocks();
         Vec3 vec3 = this.getDeltaMovement();
         double d2 = this.getX() + vec3.x;
         double d0 = this.getY() + vec3.y;

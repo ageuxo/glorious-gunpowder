@@ -30,14 +30,14 @@ public class ModBusEvents {
     }
 
     @SubscribeEvent
-    public static void gatherData(GatherDataEvent event){
+    public static void gatherData(GatherDataEvent.Client event){
         DataGenerator generator = event.getGenerator();
         PackOutput output = generator.getPackOutput();
         ExistingFileHelper helper = event.getExistingFileHelper();
         CompletableFuture<HolderLookup.Provider> lookup = event.getLookupProvider();
         ModBlockTagsProvider blockTagsProvider =  new ModBlockTagsProvider(output, lookup, helper);
-        generator.addProvider(event.includeServer(), blockTagsProvider);
-        generator.addProvider(event.includeServer(), new ItemTagProvider(output, lookup, blockTagsProvider.contentsGetter(), helper));
+        generator.addProvider(event.includeDev(), blockTagsProvider);
+        generator.addProvider(event.includeDev(), new ItemTagProvider(output, lookup, blockTagsProvider.contentsGetter(), helper));
         generator.addProvider(true, new MaterialProvider(output, lookup));
         generator.addProvider(true, new PartShapeProvider(output, lookup));
     }

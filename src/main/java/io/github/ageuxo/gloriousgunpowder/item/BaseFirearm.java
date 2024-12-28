@@ -9,19 +9,20 @@ import io.github.ageuxo.gloriousgunpowder.datagen.ItemTagProvider;
 import io.github.ageuxo.gloriousgunpowder.entity.projectile.BulletProjectile;
 import io.github.ageuxo.gloriousgunpowder.event.GunEventFactory;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ProjectileWeaponItem;
-import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.component.ChargedProjectiles;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -36,31 +37,33 @@ import java.util.function.Predicate;
 public class BaseFirearm extends ProjectileWeaponItem {
     private boolean startSoundPlayed = false;
     private boolean midLoadSoundPlayed = false;
-    public BaseFirearm(Properties pProperties) {
-        super(pProperties.stacksTo(1));
+    public BaseFirearm(Properties properties) {
+        super(properties.stacksTo(1));
     }
+
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pHand) {
-        ItemStack gun = pPlayer.getItemInHand(pHand);
+    public @NotNull InteractionResult use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
+        ItemStack gun = player.getItemInHand(hand);
         if (isReloaded(gun)) {
             float velocity = getGunAttributeValue(gun, GunStats.VELOCITY.get());
-            this.shootBullet(pLevel, pPlayer, pHand, gun, velocity, 1.0F, null);
-            return InteractionResultHolder.consume(gun);
-        } else if (!pPlayer.getProjectile(gun).isEmpty()) {
+            this.shootBullet(level, player, hand, gun, velocity, 1.0F, null);
+            return InteractionResult.CONSUME;
+        } else if (!player.getProjectile(gun).isEmpty()) {
             this.startSoundPlayed = false;
             this.midLoadSoundPlayed = false;
-            pPlayer.startUsingItem(pHand);
-            return InteractionResultHolder.consume(gun);
+            player.startUsingItem(hand);
+            return InteractionResult.CONSUME;
         } else {
-            return InteractionResultHolder.fail(gun);
+            return InteractionResult.FAIL;
         }
     }
+
     @Override
-    public void onUseTick(Level pLevel, @NotNull LivingEntity pLivingEntity, @NotNull ItemStack pStack, int pCount) {
+    public void onUseTick(Level pLevel, @NotNull LivingEntity livingEntity, @NotNull ItemStack stack, int count) {
         if (!pLevel.isClientSide) {
             SoundEvent initialSoundEvent = SoundEvents.NOTE_BLOCK_GUITAR.value();
             SoundEvent middleSoundEvent = SoundEvents.NOTE_BLOCK_BANJO.value();
-            float f = (float)(pStack.getUseDuration() - pCount) / (float)(getUseDuration(pStack));
+            float f = (float)(stack.getUseDuration(livingEntity) - count) / (float)(stack.getUseDuration(livingEntity));
             if (f < 0.2F) {
                 this.startSoundPlayed = false;
                 this.midLoadSoundPlayed = false;
@@ -68,29 +71,30 @@ public class BaseFirearm extends ProjectileWeaponItem {
 
             if (f >= 0.2F && !this.startSoundPlayed) {
                 this.startSoundPlayed = true;
-                pLevel.playSound(null, pLivingEntity.getX(), pLivingEntity.getY(), pLivingEntity.getZ(), initialSoundEvent, SoundSource.PLAYERS, 0.5F, 1.0F);
+                pLevel.playSound(null, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), initialSoundEvent, SoundSource.PLAYERS, 0.5F, 1.0F);
             }
 
             if (f >= 0.5F && !this.midLoadSoundPlayed) {
                 this.midLoadSoundPlayed = true;
-                pLevel.playSound(null, pLivingEntity.getX(), pLivingEntity.getY(), pLivingEntity.getZ(), middleSoundEvent, SoundSource.PLAYERS, 0.5F, 1.0F);
+                pLevel.playSound(null, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), middleSoundEvent, SoundSource.PLAYERS, 0.5F, 1.0F);
             }
         }
     }
-    public void shootBullet(Level pLevel, LivingEntity pShooter, InteractionHand pHand, ItemStack pWeapon, float pVelocity, float pInaccuracy, @Nullable LivingEntity pTarget) {
-        if (!pLevel.isClientSide()) {
-            ChargedProjectiles chargedprojectiles = pWeapon.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
+
+    public void shootBullet(Level level, LivingEntity shooter, InteractionHand hand, ItemStack weapon, float velocity, float inaccuracy, @Nullable LivingEntity target) {
+        if (level instanceof ServerLevel serverLevel) {
+            ChargedProjectiles chargedprojectiles = weapon.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
             if (chargedprojectiles != null && !chargedprojectiles.isEmpty()) {
-                GunEventFactory.fireGunEvent(pShooter, pWeapon);
-                this.shoot(pLevel, pShooter, pHand, pWeapon, chargedprojectiles.getItems(), pVelocity, pInaccuracy , pShooter instanceof Player, pTarget);
-                if (pShooter instanceof ServerPlayer serverplayer) {
-                    serverplayer.awardStat(Stats.ITEM_USED.get(pWeapon.getItem()));
+                GunEventFactory.fireGunEvent(shooter, weapon);
+                this.shoot(serverLevel, shooter, hand, weapon, chargedprojectiles.getItems(), velocity, inaccuracy , shooter instanceof Player, target);
+                if (shooter instanceof ServerPlayer serverplayer) {
+                    serverplayer.awardStat(Stats.ITEM_USED.get(weapon.getItem()));
                 }
 
             }
         } else {
-            pLevel.playSound(pShooter, pShooter.getOnPos(), ModSounds.GUN_SHOT_SOUND.get(), SoundSource.PLAYERS, 0.5F, 1.25F);
-            GunEventFactory.fireGunEvent(pShooter, pWeapon);
+            level.playSound(shooter, shooter.getOnPos(), ModSounds.GUN_SHOT_SOUND.get(), SoundSource.PLAYERS, 0.5F, 1.25F);
+            GunEventFactory.fireGunEvent(shooter, weapon);
         }
     }
     @Override
@@ -98,9 +102,10 @@ public class BaseFirearm extends ProjectileWeaponItem {
         float damage = getGunAttributeValue(pWeapon, GunStats.DAMAGE.get());
         return new BulletProjectile(pLevel, pShooter, damage);
     }
+
     @Override
-    public int getUseDuration(@NotNull ItemStack pStack) {
-        float reloadSpeed = getGunAttributeValue(pStack, GunStats.RELOAD_TIME.get());
+    public int getUseDuration(@NotNull ItemStack stack, @NotNull LivingEntity entity) {
+        float reloadSpeed = getGunAttributeValue(stack, GunStats.RELOAD_TIME.get());
         return (int) (reloadSpeed * 20);
     }
 
@@ -138,21 +143,26 @@ public class BaseFirearm extends ProjectileWeaponItem {
         Vector3f vector3f2 = new Vector3f(vector3f).rotateAxis((float) (Math.PI / 2), vector3f1.x, vector3f1.y, vector3f1.z);
         return new Vector3f(vector3f).rotateAxis((float) Math.toRadians(pAngle), vector3f2.x, vector3f2.y, vector3f2.z);
     }
+
     @Override
-    public void releaseUsing(@NotNull ItemStack pStack, @NotNull Level pLevel, @NotNull LivingEntity pEntityLiving, int pTimeLeft) {
-        float reloadDuration = this.getUseDuration(pStack) - pTimeLeft;
-        boolean canReload = reloadDuration / getUseDuration(pStack) > 1;
-        if (canReload && !isReloaded(pStack) && tryLoadBullet(pEntityLiving, pStack)) {
-            pLevel.playSound(
+    public boolean releaseUsing(@NotNull ItemStack stack, @NotNull Level level, @NotNull LivingEntity livingEntity, int timeLeft) {
+        int useDuration = getUseDuration(stack, livingEntity);
+        float reloadDuration = useDuration - timeLeft;
+        boolean canReload = reloadDuration / useDuration > 1;
+        if (canReload && !isReloaded(stack) && tryLoadBullet(livingEntity, stack)) {
+            level.playSound(
                     null,
-                    pEntityLiving.getX(),
-                    pEntityLiving.getY(),
-                    pEntityLiving.getZ(),
+                    livingEntity.getX(),
+                    livingEntity.getY(),
+                    livingEntity.getZ(),
                     SoundEvents.NOTE_BLOCK_HARP.value(),
-                    pEntityLiving.getSoundSource(),
+                    livingEntity.getSoundSource(),
                     1.0F,
-                    1.0F / (pLevel.getRandom().nextFloat() * 0.5F + 1.0F) + 0.2F
+                    1.0F / (level.getRandom().nextFloat() * 0.5F + 1.0F) + 0.2F
             );
+            return true;
+        } else {
+            return false;
         }
 
     }
@@ -188,8 +198,8 @@ public class BaseFirearm extends ProjectileWeaponItem {
         return pStack.is(this);
     }
     @Override
-    public @NotNull UseAnim getUseAnimation(@NotNull ItemStack pStack) {
-        return UseAnim.SPEAR;
+    public @NotNull ItemUseAnimation getUseAnimation(@NotNull ItemStack pStack) {
+        return ItemUseAnimation.SPEAR;
     }
 
     public GunAttribute getGunAttribute(ItemStack stack, GunStat stat) {
