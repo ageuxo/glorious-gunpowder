@@ -8,7 +8,6 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import org.jetbrains.annotations.NotNull;
 
 public class BulletModel <T extends BulletRenderState> extends EntityModel<T> {
     public static final String MAIN = "main";
@@ -30,16 +29,5 @@ public class BulletModel <T extends BulletRenderState> extends EntityModel<T> {
                 PartPose.ZERO
         );
         return LayerDefinition.create(meshdefinition, 64, 32);
-    }
-
-    @Override
-    public void setupAnim(@NotNull T renderState) {
-        super.setupAnim(renderState);
-        main.xScale = 0.5f;
-        main.yScale = 0.5f;
-        main.zScale = 0.5f;
-
-        main.xRot = renderState.xRot;
-        main.yRot = renderState.yRot;
     }
 }
