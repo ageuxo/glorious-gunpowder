@@ -9,6 +9,7 @@ import io.github.ageuxo.gloriousgunpowder.data.GunComponents;
 import io.github.ageuxo.gloriousgunpowder.data.GunDataComponents;
 import io.github.ageuxo.gloriousgunpowder.datagen.MaterialProvider;
 import io.github.ageuxo.gloriousgunpowder.datagen.PartShapeProvider;
+import io.github.ageuxo.gloriousgunpowder.datagen.PartShapeTagProvider;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 

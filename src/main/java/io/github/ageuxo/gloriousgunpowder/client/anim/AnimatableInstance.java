@@ -23,7 +23,6 @@ public class AnimatableInstance {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private final Map<String, Either<BakedModel, GroupsModel>> name2ModelMap = new HashMap<>();
-    private final Map<String, String> animGetterMap = new HashMap<>();
     private final ArrayDeque<Animation> queue = new ArrayDeque<>();
 
     private final long id;
@@ -109,7 +108,6 @@ public class AnimatableInstance {
         ModelManager manager = Minecraft.getInstance().getModelManager();
         for (var entry : components.entrySet()){
             addModel(entry.getKey(), fetchModel(manager, entry.getValue()));
-            animGetterMap.put(entry.getKey(), entry.getValue().getPath());
         }
     }
 
