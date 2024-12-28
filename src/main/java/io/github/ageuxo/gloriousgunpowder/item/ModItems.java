@@ -21,15 +21,10 @@ public class ModItems {
     public static final ResourceKey<CreativeModeTab> GUN_TAB_KEY = ResourceKey.create(Registries.CREATIVE_MODE_TAB, GloriousGunpowderMod.rl("gun_tab"));
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(GloriousGunpowderMod.MOD_ID);
     private static final Set<DeferredHolder<Item, ? extends Item>> GUN_TAB_ITEMS = new HashSet<>();
-    public static final DeferredItem<BaseBulletItem> BULLET_ITEM = registerItem("bullet", () -> new BaseBulletItem(new Item.Properties().stacksTo(16)));
-    public static final DeferredItem<BaseFirearm> BASIC_FIREARM = registerItem("basic_firearm", () -> new BaseFirearm(new Item.Properties().durability(60)));
+    public static final DeferredItem<BaseBulletItem> BULLET_ITEM = registerItem("bullet", () -> new BaseBulletItem(new Item.Properties().stacksTo(16).setId(makeId("bullet"))));
+    public static final DeferredItem<BaseFirearm> BASIC_FIREARM = registerItem("basic_firearm", () -> new BaseFirearm(new Item.Properties().durability(60).setId(makeId("basic_firearm"))));
 
-    public static void register(IEventBus bus) {
-        ITEMS.register(bus);
-        GUN_CREATIVE_TAB.register(bus);
-    }
-
-    static <I extends Item> DeferredItem<I> registerItem(final String itemName, final Supplier<? extends I> itemSupplier) {
+    protected static <I extends Item> DeferredItem<I> registerItem(final String itemName, final Supplier<? extends I> itemSupplier) {
         DeferredItem<I> item = ITEMS.register(itemName, itemSupplier);
         GUN_TAB_ITEMS.add(item);
         return item;
@@ -41,5 +36,14 @@ public class ModItems {
             .icon(() -> new ItemStack(BULLET_ITEM.get()))
             .build()
     );
+
+    protected static ResourceKey<Item> makeId(String path) {
+        return ResourceKey.create(Registries.ITEM, GloriousGunpowderMod.rl(path));
+    }
+
+    public static void register(IEventBus bus) {
+        ITEMS.register(bus);
+        GUN_CREATIVE_TAB.register(bus);
+    }
 
 }
