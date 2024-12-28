@@ -17,4 +17,12 @@ public class AnimationHolder {
         this.id = id;
         this.animationMap = animationMap;
     }
+
+    public Animation get(String animation){
+        return this.animationMap.get(animation);
+    }
+
+    public ResourceLocation id(){
+        return this.id;
+    }
 }

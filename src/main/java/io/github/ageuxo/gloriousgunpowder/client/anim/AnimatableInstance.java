@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -36,6 +37,25 @@ public class AnimatableInstance {
 
     public long id(){
         return this.id;
+    }
+
+    public void playAnimation(@NotNull Animation animation, long gameTime){
+        this.currentAnimation = animation;
+        this.startTick = gameTime;
+    }
+
+    public void playAnimation(@NotNull ResourceLocation holderLoc, @NotNull String animName, long gameTime){
+        AnimationHolder holder = AnimationManager.INSTANCE.get(holderLoc);
+        if (holder == null){
+            LOGGER.error("Called playAnimation() on non-existent AnimationHolder: {} with animName of {}", holderLoc, animName);
+        } else {
+            Animation animation = holder.get(animName);
+            if (animation == null){
+                LOGGER.warn("Tried to play missing animation {} of AnimationHolder {}", animName, holderLoc);
+            } else {
+                playAnimation(animation, gameTime);
+            }
+        }
     }
 
     /**

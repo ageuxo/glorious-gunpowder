@@ -18,6 +18,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.slf4j.Logger;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class AnimationManager extends SimpleJsonResourceReloadListener {
         super(pGson, "animations/dynamo");
     }
 
-    public AnimationHolder get(ResourceLocation location){
+    public @Nullable AnimationHolder get(ResourceLocation location){
         return this.cache.get(location);
     }
 

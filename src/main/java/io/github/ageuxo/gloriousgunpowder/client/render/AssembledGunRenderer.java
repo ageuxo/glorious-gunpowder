@@ -48,7 +48,7 @@ public class AssembledGunRenderer extends BlockEntityWithoutLevelRenderer {
         super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
     }
 
-    private AnimatableInstance getInstance(long id){
+    public AnimatableInstance getInstance(long id){
         return ID_INSTANCE_MAP.computeIfAbsent(id, this::createAnimatableInstance);
     }
 
@@ -118,11 +118,11 @@ public class AssembledGunRenderer extends BlockEntityWithoutLevelRenderer {
     public void setupPoseForGroup(PoseStack poseStack, AnimatableInstance instance, BoneGroup group, float partialTick){
         BoneGroupTransform transforms = instance.setGroupTransformForTick(this.transform, group, getGameTime(), partialTick);
 
-        RenderHelpers.translatePosestack(poseStack, transforms.translation());
         RenderHelpers.translateToPivot(poseStack, group);
         RenderHelpers.rotateAroundPivot(poseStack, transforms.rotation());
         RenderHelpers.scalePosestack(poseStack, transforms.scale());
         RenderHelpers.translateFromPivot(poseStack, group);
+        RenderHelpers.translatePosestack(poseStack, transforms.translation());
     }
 
     private long getGameTime(){

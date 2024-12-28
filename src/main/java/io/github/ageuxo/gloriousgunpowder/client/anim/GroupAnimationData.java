@@ -33,8 +33,17 @@ public class GroupAnimationData {
 
     public GroupAnimationData(TreeMap<Float, Vector3f> translationMap, TreeMap<Float, Vector3f> scaleMap, TreeMap<Float, Quaternionf> rotationMap) {
         this.translationMap = translationMap;
+        if (translationMap.isEmpty()) {
+            translationMap.put(0f, new Vector3f(0));
+        }
         this.scaleMap = scaleMap;
+        if (scaleMap().isEmpty()){
+            scaleMap.put(0f, new Vector3f(1));
+        }
         this.rotationMap = rotationMap;
+        if (rotationMap.isEmpty()){
+            rotationMap.put(0f, new Quaternionf());
+        }
     }
 
     public Vector3f getTranslation(float frame){
