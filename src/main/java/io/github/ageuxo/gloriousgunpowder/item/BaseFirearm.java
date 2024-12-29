@@ -85,6 +85,7 @@ public class BaseFirearm extends ProjectileWeaponItem {
         if (level instanceof ServerLevel serverLevel) {
             ChargedProjectiles chargedprojectiles = weapon.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
             if (chargedprojectiles != null && !chargedprojectiles.isEmpty()) {
+                animateFiring(serverLevel, shooter, weapon);
                 GunEventFactory.fireGunEvent(shooter, weapon);
                 this.shoot(serverLevel, shooter, hand, weapon, chargedprojectiles.getItems(), velocity, inaccuracy , shooter instanceof Player, target);
                 if (shooter instanceof ServerPlayer serverplayer) {
@@ -160,6 +161,9 @@ public class BaseFirearm extends ProjectileWeaponItem {
                     1.0F,
                     1.0F / (level.getRandom().nextFloat() * 0.5F + 1.0F) + 0.2F
             );
+            if (level instanceof ServerLevel serverLevel) {
+                animatePriming(serverLevel, livingEntity, stack);
+            }
             return true;
         } else {
             return false;
@@ -218,6 +222,11 @@ public class BaseFirearm extends ProjectileWeaponItem {
         return getGunAttribute(stack, stat).value();
     }
 
+    public void animateFiring(ServerLevel serverLevel, LivingEntity shooter, ItemStack weapon) {
 
+    }
 
+    public void animatePriming(ServerLevel serverLevel, LivingEntity shooter, ItemStack weapon) {
+
+    }
 }
