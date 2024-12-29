@@ -10,7 +10,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
@@ -33,11 +32,10 @@ public class ModBusEvents {
     public static void gatherData(GatherDataEvent.Client event){
         DataGenerator generator = event.getGenerator();
         PackOutput output = generator.getPackOutput();
-        ExistingFileHelper helper = event.getExistingFileHelper();
         CompletableFuture<HolderLookup.Provider> lookup = event.getLookupProvider();
-        ModBlockTagsProvider blockTagsProvider =  new ModBlockTagsProvider(output, lookup, helper);
+        ModBlockTagsProvider blockTagsProvider =  new ModBlockTagsProvider(output, lookup);
         generator.addProvider(event.includeDev(), blockTagsProvider);
-        generator.addProvider(event.includeDev(), new ItemTagProvider(output, lookup, blockTagsProvider.contentsGetter(), helper));
+        generator.addProvider(event.includeDev(), new ItemTagProvider(output, lookup, blockTagsProvider.contentsGetter()));
         generator.addProvider(true, new MaterialProvider(output, lookup));
         generator.addProvider(true, new PartShapeProvider(output, lookup));
     }
