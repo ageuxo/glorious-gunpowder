@@ -1,0 +1,27 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.fourPartGun.prime": {
+			"animation_length": 0.5,
+			"bones": {
+				"mechanism": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.25": {
+							"vector": [-27.5, 0, 0]
+						},
+						"0.3333": {
+							"vector": [-22.5, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"animation.fourPartGun.fire": {
+			"loop": true
+		}
+	},
+	"geckolib_format_version": 2
+}
